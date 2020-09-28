@@ -7,6 +7,7 @@ from .models import Sensor, Cluster, Misurazione
 
 # Create your views here.
 
+
 def get_sensors(request):
     mis = []
     sensors = Sensor.objects.all()
@@ -19,8 +20,9 @@ def get_sensors(request):
 def post_update(request):
     if request.method == "POST":
         json_data = json.loads(request.body)
+        # print(json_data)
         if Sensor.objects.filter(IPAddress=json_data['IPAddress']):
-            sensor = Sensor.objects.index(IPAddress=json_data['IPAddress'])
+            sensor = Sensor.objects.get(IPAddress=json_data['IPAddress'])
             naive_date = datetime.strptime(json_data['date'], '%Y/%m/%dT%H:%M:%S')
             current_tz = timezone.get_current_timezone()
             date = current_tz.localize(naive_date)
