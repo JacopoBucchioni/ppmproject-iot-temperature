@@ -1,0 +1,19 @@
+{% extends 'iotemperature/base.html' %}
+
+{% block content %}
+
+
+
+{% for m in mis %}
+    <div id="sensors">
+        <h4>Sensore: {{ m.sensor.IPAddress }}</h4>
+        <p>temperatura: {{ m.temperature }} <br>
+            umidità: {{ m.humidity }}
+        </p>
+        <p>last update: {{ m.date }}</p>
+    </div>
+{% endfor %}
+
+
+
+{% endblock %}
