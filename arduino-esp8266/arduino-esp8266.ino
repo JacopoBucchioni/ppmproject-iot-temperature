@@ -78,7 +78,6 @@ void loop() {
 
     String httpRequestJSON;
 
-    //doc["csrf_token"] = "y4!h*1l-qdyklh_d_q#t*0d5!0f%*idprsxyu0!#)pn&^3n7u!";
     doc["IPAddress"] = myIPAddress.toString();
     doc["temperature"] = dht.readTemperature();
     doc["humidity"] = dht.readHumidity();
