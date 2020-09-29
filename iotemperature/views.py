@@ -10,7 +10,8 @@ from .models import Sensor, Cluster, Misurazione
 
 def get_sensors(request):
     mis = []
-    sensors = Sensor.objects.all()
+    # sensors = Sensor.objects.all()
+    sensors = list(set(Misurazione.objects.values_list('sensor', flat=True)))
     for i in range(len(sensors)):
         mis.append(Misurazione.objects.filter(sensor=sensors[i]).latest('date'))
 
