@@ -3,16 +3,18 @@
 {% block content %}
 
 
-
-{% for m in mis %}
-    <div id="sensors">
+<div id="mysensors">
+    {% for m in mis %}
+    <div>
         <h4>Sensore: {{ m.sensor.IPAddress }}</h4>
         <p>temperatura: {{ m.temperature }} <br>
             umidità: {{ m.humidity }}
         </p>
         <p>last update: {{ m.date }}</p>
     </div>
-{% endfor %}
+    {% endfor %}
+</div>
+
 
 
 
