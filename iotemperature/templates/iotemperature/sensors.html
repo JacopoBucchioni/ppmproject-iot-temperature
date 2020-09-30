@@ -6,7 +6,7 @@
 <div id="mysensors">
     {% for m in mis %}
     <div>
-        <h4>Sensore: {{ m.sensor.IPAddress }}</h4>
+        <h4>Sensore: {{ m.sensor }}</h4>
         <p>temperatura: {{ m.temperature }} <br>
             umidità: {{ m.humidity }}
         </p>
