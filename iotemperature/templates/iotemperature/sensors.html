@@ -3,14 +3,21 @@
 {% block content %}
 
 
-<div id="mysensors">
+<div class="container" id="mysensors">
     {% for m in mis %}
-    <div>
-        <h4>Sensore: {{ m.sensor }}</h4>
-        <p>temperatura: {{ m.temperature }} <br>
-            umidità: {{ m.humidity }}
-        </p>
-        <p>last update: {{ m.date }}</p>
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="card  mb-3 text-center">
+                <div class="card-body">
+                    <h3 class="card-title">{{ m.sensor }}</h3>
+                    <p class="card-text">temperatura: {{ m.temperature }} <br>
+                        umidità: {{ m.humidity }}
+                    </p>
+                    <p class="card-text">last update: {{ m.date }}</p>
+                </div>
+            </div>
+
+        </div>
     </div>
     {% endfor %}
 </div>
