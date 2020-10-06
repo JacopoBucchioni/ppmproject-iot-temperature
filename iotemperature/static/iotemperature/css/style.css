@@ -1,3 +1,27 @@
-body {
-    background-color: HoneyDew;
-    }
+/* CSS Document */
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+html,h1,h2,h3,h4,h5,h6,a{
+ font-family: "Raleway";
+}
+
+.bg-light {
+	background:#417690 !important;
+}
+
+.navbar-light, .navbar-light .navbar-nav .nav-link, .navbar-light .navbar-brand{
+	color: #f4f4f4;
+	cursor: pointer;
+}
+
+.navbar-light .navbar-nav .nav-link{
+	margin-right: 1em !important;
+}
+
+.navbar-light .navbar-collapse{
+	justify-content: flex-end;
+}
+
+.navbar-light .navbar-toggler{
+	background:#fff !important;
+}
