@@ -17,6 +17,8 @@ def get_sensors(request):
     sensors = list(set(Misurazione.objects.values_list('sensor', flat=True)))
     for i in range(len(sensors)):
         mis.append(Misurazione.objects.filter(sensor=sensors[i]).latest('date'))
+    mis.sort(key=lambda x: x.date, reverse=True)
+    # print(mis)
 
     return render(request, 'iotemperature/sensors.html', context={'mis': mis})
 
