@@ -1,19 +1,16 @@
 {% extends 'iotemperature/base.html' %}
-
 {% block content %}
-
 
 <div class="container" id="mysensors">
     {% for m in mis %}
     <div class="row justify-content-center">
         <div class="col-12 col-md-6 col-lg-5">
-            <div class="card  mb-3 text-center">
+
+            <div class="card mb-3 text-center ">
                 <div class="card-body">
                     <h3 class="card-title">{{ m.sensor }}</h3>
-                    <p class="card-text">temperatura: {{ m.temperature }} <br>
-                        umidità: {{ m.humidity }}
-                    </p>
-                    <p class="card-text">last update: {{ m.date }}</p>
+                    <p class="card-text">temperatura: {{ m.temperature }} ℃<br>umidità: {{ m.humidity }} %</p>
+                    <p class="card-text"><small class="text-muted">Last update {{ m.date }}</small></p>
                 </div>
             </div>
 
@@ -21,8 +18,6 @@
     </div>
     {% endfor %}
 </div>
-
-
 
 
 {% endblock %}
