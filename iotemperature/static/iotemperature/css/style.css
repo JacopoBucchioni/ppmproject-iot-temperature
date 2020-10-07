@@ -9,6 +9,7 @@ body {
 	background-color: #f4f4f4 !important;
 }
 
+/* navbar */
 .bg-light {
 	background:#417690 !important;
 }
@@ -28,4 +29,13 @@ body {
 
 .navbar-light .navbar-toggler{
 	background:#fff !important;
+}
+
+/* sensor cards */
+.card .card-footer {
+	padding: 8px;
+}
+
+#IPAddress, #sensor-name {
+	margin-bottom: 0;
 }
