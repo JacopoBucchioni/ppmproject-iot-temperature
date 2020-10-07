@@ -6,10 +6,16 @@
     <div class="row justify-content-center">
         <div class="col-12 col-md-6 col-lg-5">
 
-            <div class="card mb-3 text-center ">
+            <div class="card mb-3 text-center shadow rounded">
                 <div class="card-body">
-                    <h3 class="card-title">{{ m.sensor }}</h3>
-                    <p class="card-text">temperatura: {{ m.temperature }} ℃<br>umidità: {{ m.humidity }} %</p>
+                    <h3 class="card-title" id="sensor-name">{{ m.sensor }}</h3>
+                    {% if m.sensor.friendlyName %}
+                    <p class="card-text" id="IPAddress"><small class="text-muted">{{ m.sensor.IPAddress }}</small></p>
+                    {% endif %}
+                    <p class="card-text" style="margin-top: 12px;">temperatura: {{ m.temperature }} ℃ <br>
+                        umidità: {{ m.humidity }} % </p>
+                </div>
+                <div class="card-footer">
                     <p class="card-text"><small class="text-muted">Last update {{ m.date }}</small></p>
                 </div>
             </div>
