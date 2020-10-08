@@ -30,6 +30,8 @@ def post_update(request):
         if Sensor.objects.filter(IPAddress=json_data['IPAddress']):
             sensor = Sensor.objects.get(IPAddress=json_data['IPAddress'])
             date = datetime.strptime(json_data['date'], '%Y/%m/%dT%H:%M:%S')
-            Misurazione.objects.create(id=None, sensor=sensor, temperature=json_data['temperature'], humidity=json_data['humidity'], date=date)
+            if date <= datetime.now():  # todo to test
+                Misurazione.objects.create(id=None, sensor=sensor, temperature=json_data['temperature'], humidity=json_data['humidity'], date=date)
 
     return render(request, 'iotemperature/update.html')
+
