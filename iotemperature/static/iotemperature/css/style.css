@@ -32,10 +32,15 @@ body {
 }
 
 /* sensor cards */
-.card .card-footer {
-	padding: 8px;
-}
 
 #IPAddress, #sensor-name {
 	margin-bottom: 0;
+}
+
+#sensor-data {
+	margin-top: 12px;
+}
+
+.card .card-footer {
+	padding: 8px;
 }
