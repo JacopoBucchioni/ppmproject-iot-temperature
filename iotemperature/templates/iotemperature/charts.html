@@ -9,24 +9,68 @@
 
     <div class="container-fluid">
         <div class="row">
+            <div class="col-12" style="padding-left: 10px;">
+                <label class="form-label" style="margin-bottom: 0; margin-top: 8px;">Seleziona Sensore:</label>
+            </div>
+        </div>
+
+        <div class="row">
+
             <div class="col-md-12 col-lg-2">
-                    <div class="row">
-                        {% for s in sensors %}
-                            <div class="col-4 col-sm-4 col-md-3 col-lg-12 col-xl-12">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="sensor{{ s.id }}">
-                                    <label class="form-check-label" for="sensor{{ s.id }}">
-                                        {{ s }}
-                                    </label>
+                <div class="row">
+                    {% for s in sensors %}
+                        <div class="col-4 col-sm-4 col-md-3 col-lg-12 col-xl-12"
+                             style="padding-right: 5px; padding-left: 25px;">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="exampleRadios" id="sensor{{ s.id }}"
+                                       value="option2">
+                                <label class="form-check-label" for="sensor{{ s.id }}">{{ s }}</label>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <br>
+
+                <div class="row">
+                    <div class="col-md-6 col-lg-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class='col-4 col-sm-4 col-md-4 col-lg-12 col-xl-12'>
+                                    <label for="datetime-input-start" class="form-label">Data e Ora Inizio:</label>
+                                </div>
+                                <div class='col-8 col-sm-8 col-md-8 col-lg-12 col-xl-12'>
+                                    <input class="form-control" type="datetime-local" value=""
+                                           id="datetime-input-start">
                                 </div>
                             </div>
-                        {% endfor %}
+                        </div>
                     </div>
+                    <div class="col-md-6 col-lg-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class='col-4 col-sm-4 col-md-4 col-lg-12 col-xl-12'>
+                                    <label for="datetime-input-end" class="form-label">Data e Ora Fine:</label>
+                                </div>
+                                <div class='col-8 col-sm-8 col-md-8 col-lg-12 col-xl-12'>
+                                    <input class="form-control" type="datetime-local" value="" id="datetime-input-end">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-primary" id="select-chart-button" type="button">Seleziona</button>
+                    </div>
+                </div>
             </div>
+
 
             <div class="col-md-12 col-lg-10">
                 <canvas id="mychart"></canvas>
             </div>
+
         </div>
     </div>
 
