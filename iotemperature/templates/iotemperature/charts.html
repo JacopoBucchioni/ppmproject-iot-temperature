@@ -1,0 +1,33 @@
+{% extends 'iotemperature/base.html' %}
+{% block content %}
+
+
+{% load static %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+<script src="{% static 'iotemperature/js/myCharts.js' %}"></script>
+
+<div id="container">
+    <div class="row">
+        <div class="col-md-12 col-lg-2">
+            <nav class="nav flex-column">
+                <form>
+                    <div class="form-group" , style="margin-top: 15px; margin-left: 15px;">
+                        {% for s in sensors %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="sensore1">
+                                <label class="form-check-label" for="sensore1">{{ s }}</label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </form>
+            </nav>
+        </div>
+        <div class="col-md-12 col-lg-10">
+            <canvas id="mychart"></canvas>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+

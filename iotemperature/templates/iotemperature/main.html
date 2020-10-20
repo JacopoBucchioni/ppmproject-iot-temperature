@@ -1,0 +1,79 @@
+{% extends 'iotemperature/base.html' %}
+{% block content %}
+
+    {% load static %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+
+    <div class="container" id="mysensors">
+        {% for m in mis %}
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-5">
+
+                    <div class="card mt-3 text-center shadow rounded" id="sensor-{{ m.sensor.id }}">
+                        <div class="card-body" id="mis-card-body">
+                            <h3 class="card-title" id="sensor-name">{{ m.sensor }}</h3>
+                            {% if m.sensor.friendlyName %}
+                                <p class="card-text" id="IPAddress"><small
+                                        class="text-muted">{{ m.sensor.IPAddress }}</small></p>
+                            {% endif %}
+                            <p class="card-text" id="sensor-data">temperatura: {{ m.temperature }} ℃ <br>
+                                umidità: {{ m.humidity }} % </p>
+                            <button class="btn btn-primary" id="bottone-grafico" type="button" data-toggle="collapse"
+                                    data-target="#collapseItem-{{ m.sensor.id }}" aria-expanded="false"
+                                    aria-controls="collapseItem-{{ m.sensor.id }}">Vedi Grafico
+                            </button>
+                        </div>
+                        <div class="card-footer">
+                            <p class="card-text"><small class="text-muted">Last update {{ m.date }}</small></p>
+                        </div>
+                        <div class="collapse" id="collapseItem-{{ m.sensor.id }}">
+                            <canvas id="mychart-{{ m.sensor.id }}"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        var config = {
+            type: 'line',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                datasets: [
+                    {
+                        label: 'My First dataset',
+                        fill: false,
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: [5, 12, 31, 45, 30, 22, 10],
+                    },
+
+                    {
+                        label: 'My Second dataset',
+                        fill: false,
+                        backgroundColor: 'rgb(54, 162, 235)',
+                        borderColor: 'rgb(54, 162, 235)',
+                        data: [17, 15, 50, 22, 31, 44, 19],
+                    }
+                ]
+            },
+
+            options: {
+                responsive: true,
+                scales: {
+                    xAxes: [{display: true}],
+                    yAxes: [{display: true}]
+                }
+            }
+
+        };
+
+        window.onload = function () {
+            var ctx = document.getElementById('mychart').getContext('2d');
+            window.myChart = new Chart(ctx, config);
+        };
+
+    </script>
+
+{% endblock %}

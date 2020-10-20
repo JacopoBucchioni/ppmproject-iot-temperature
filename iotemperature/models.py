@@ -4,14 +4,14 @@ from django.db import models
 
 
 class Cluster(models.Model):
-    name = models.CharField(max_length=200, primary_key=True)
+    name = models.CharField(max_length=200, blank=False, unique=True)
 
     def __str__(self):
         return self.name
 
 
 class Sensor(models.Model):
-    IPAddress = models.GenericIPAddressField(primary_key=True)
+    IPAddress = models.GenericIPAddressField(blank=False, unique=True)
     friendlyName = models.CharField(max_length=200, blank=True)
     cluster = models.ForeignKey(Cluster, on_delete=models.SET_NULL, null=True, blank=True)
 

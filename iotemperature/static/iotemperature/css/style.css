@@ -9,7 +9,8 @@ body {
 	background-color: #f4f4f4 !important;
 }
 
-/* navbar */
+
+/* START NAVBAR */
 .bg-light {
 	background:#417690 !important;
 }
@@ -30,17 +31,43 @@ body {
 .navbar-light .navbar-toggler{
 	background:#fff !important;
 }
+/* END NAVBAR */
 
-/* sensor cards */
 
-#IPAddress, #sensor-name {
+/* CARD STYLE */
+.card .card-title {
+	margin-bottom: 0px;
+}
+/* END CARD STYLE */
+
+
+/* MIS CARD STYLE */
+#mis-card-body {
+	padding-bottom: 10px;
+}
+
+#IPAddress {
 	margin-bottom: 0;
 }
 
 #sensor-data {
-	margin-top: 12px;
+	margin-top: 5px;
+	margin-bottom: 15px;
 }
 
 .card .card-footer {
 	padding: 8px;
+}
+
+#bottone-grafico {
+
+}
+/* END MIS CARD STYLE */
+
+.close {
+	font-size: 1.8rem;
+}
+
+#bottone-modifica {
+	margin-top: 14px;
 }
