@@ -1,25 +1,7 @@
-#include <ArduinoJson.h>
-const size_t capacity = JSON_OBJECT_SIZE(5) + 100;
-
-
 #include "DHT.h"
 #define DHTPIN 2
 #define DHTTYPE DHT11
-
 DHT dht(DHTPIN, DHTTYPE);
-
-
-#include <ESP8266WiFi.h>
-#include <ESP8266HTTPClient.h>
-
-#define SERVER_IP "192.168.188.71"
-//#define SERVER_HOST "http://iotemperature.pythonanywhere.com" // SERVER_HOST
-
-const char* ssid = "skynet";
-const char* password = "Bnqm2PE4";
-
-IPAddress myIPAddress;
-
 
 #include <NTPClient.h>
 #include <WiFiUdp.h>
@@ -28,10 +10,19 @@ const long utcOffset = 7200;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "it.pool.ntp.org", utcOffset);
 
+#include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
+#define SERVER_IP "192.168.43.79" // LAN = 192.168.188.63   WiFi = 192.168.188.71   HOTSPOT = 192.168.43.79
+//#define SERVER_HOST "http://iotemperature.pythonanywhere.com" // SERVER_HOST
+const char* ssid = "skynet";
+const char* password = "Bnqm2PE4";
+IPAddress myIPAddress;
+
+#include <ArduinoJson.h>
+const size_t capacity = JSON_OBJECT_SIZE(5) + 100;
 
 
 void setup() {
-
   Serial.begin(115200);
 
   Serial.println();
@@ -52,30 +43,26 @@ void setup() {
   timeClient.begin();
 
   dht.begin();
-
 }
 
 void loop() {
   // wait for WiFi connection
   if ((WiFi.status() == WL_CONNECTED)) {
-
     timeClient.update();
-
-    DynamicJsonDocument doc(capacity);
-
+    
     WiFiClient client;
     HTTPClient http;
-
+    
     Serial.print("[HTTP] begin...\n");
     // configure traged server and url
     http.begin(client, SERVER_IP, 8000, "/update/"); //HTTP
     // http.begin(client, SERVER_HOST"/update/");
 
-    //http.setAuthorization(pythonanywhere_api_token);
     http.addHeader("Content-Type", "application/json");
     Serial.print("[HTTP] POST...\n");
     // start connection and send HTTP header and body
 
+    DynamicJsonDocument doc(capacity);
     String httpRequestJSON;
 
     doc["IPAddress"] = myIPAddress.toString();
