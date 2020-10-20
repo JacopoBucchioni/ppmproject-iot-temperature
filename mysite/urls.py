@@ -18,5 +18,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('iotemperature.urls')),
+    path('update/', include('iotemperature.urls')),
+    path('chart/', include('iotemperature.urls')),
+    path('sensors/', include('iotemperature.urls')),
+    path('clusters/', include('iotemperature.urls')),
     path('admin/', admin.site.urls),
 ]
