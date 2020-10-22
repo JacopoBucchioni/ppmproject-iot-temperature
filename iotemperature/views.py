@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 import json
+from django.core import serializers
 from datetime import datetime
 from django.utils import timezone
 from .models import Sensor, Cluster, Misurazione
@@ -14,9 +15,10 @@ def get_mis(request):
     for i in range(len(sensors)):
         mis.append(Misurazione.objects.filter(sensor=sensors[i]).latest('date'))
     mis.sort(key=lambda x: x.date, reverse=True)
-    # print(mis)
+    print(mis)
+    print(sensors)
 
-    return render(request, 'iotemperature/main.html', context={'mis': mis})
+    return render(request, 'iotemperature/main.html', context={'mis': mis, 'sensor_id': sensors})
 
 
 def post_update(request):
@@ -48,6 +50,25 @@ def clusters_list(request):
 
 
 def chart(request):
-    misurazioni = Misurazione.objects.all()
     sensors = Sensor.objects.all()
+    # misurazioni = serializers.serialize("json", Misurazione.objects.filter(sensor__IPAddress='192.168.43.200'))
+    misurazioni = serializers.serialize("json", Misurazione.objects.all().order_by('date'))
+    print(misurazioni)
+
+    '''
+    misurazioni = list(Misurazione.objects.filter(sensor__IPAddress='192.168.43.200'))
+
+    xlabels = []
+    temp = []
+    hum = []
+    for m in misurazioni:
+        xlabels.append(m.date.__str__())
+        temp.append(m.temperature)
+        hum.append(m.humidity)
+
+    print(misurazioni)
+    print(xlabels)
+    print(temp)
+    print(hum)
+    '''
     return render(request, 'iotemperature/charts.html', context={'sensors': sensors, 'misurazoni': misurazioni})
