@@ -2,7 +2,7 @@
 {% block content %}
 
     <script>
-    var misurazioni = {{misurazoni|safe}};
+        var misurazioni = {{misurazoni|safe}};
         console.log(misurazioni);
     </script>
 
@@ -13,30 +13,10 @@
 
 
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12" style="padding-left: 10px;">
-                <label class="form-label" style="margin-bottom: 0; margin-top: 8px;">Seleziona Sensore:</label>
-            </div>
-        </div>
-
+    <div class="container-fluid" style="padding-top: 15px;">
         <div class="row">
 
             <div class="col-md-12 col-lg-2">
-                <div class="row">
-                    {% for s in sensors %}
-                        <div class="col-4 col-sm-4 col-md-3 col-lg-12 col-xl-12"
-                             style="padding-right: 5px; padding-left: 25px;">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="sensor{{ s.id }}"
-                                       value="option2">
-                                <label class="form-check-label" for="sensor{{ s.id }}">{{ s }}</label>
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
-
-                <br>
 
                 <div class="row">
                     <div class="col-md-12 col-lg-12">
@@ -86,14 +66,16 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12">
-                        <button class="btn btn-primary" id="bottoneGrafico" type="button">Seleziona</button>
+                    <div class="col-4 col-sm-4 col-md-2 col-lg-12 col-xl-12"></div>
+                    <div class="col-8 col-sm-8 col-md-10 col-lg-12 col-xl-12">
+                        <button class="btn btn-primary btn-block" id="bottoneGrafico" type="button">Seleziona</button>
                     </div>
                 </div>
+            <br>
             </div>
 
 
-            <div class="col-md-12 col-lg-10">
+            <div class="col-md-12 col-lg-10" style="padding-left: 0;">
                 <canvas id="mychart"></canvas>
             </div>
 
