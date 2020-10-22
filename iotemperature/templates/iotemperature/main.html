@@ -70,8 +70,17 @@
         };
 
         window.onload = function () {
-            var ctx = document.getElementById('mychart').getContext('2d');
-            window.myChart = new Chart(ctx, config);
+            var sensors = {{ sensor_id }};
+            console.log(sensors);
+            var mycharts = [];
+            var mychartsInstance = [];
+            for (i=0; i<sensors.length; i++) {
+                var c = document.getElementById('mychart-'+(sensors[i].toString())).getContext('2d');
+                var cx = new Chart(c, config);
+                mycharts.push(c);
+                mychartsInstance.push(cx);
+            }
+            console.log(mycharts);
         };
 
     </script>
