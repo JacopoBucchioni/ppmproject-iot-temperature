@@ -1,10 +1,16 @@
 {% extends 'iotemperature/base.html' %}
 {% block content %}
 
+    <script>
+    var misurazioni = {{misurazoni|safe}};
+        console.log(misurazioni);
+    </script>
 
-{% load static %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-<script src="{% static 'iotemperature/js/myCharts.js' %}"></script>
+    {% load static %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script src="{% static 'iotemperature/js/myCharts.js' %}"></script>
+
+
 
 
     <div class="container-fluid">
@@ -33,6 +39,26 @@
                 <br>
 
                 <div class="row">
+                    <div class="col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-4 col-sm-4 col-md-2 col-lg-12 col-xl-12">
+                                    <label for="sensori">Seleziona Sensore:</label>
+                                </div>
+                                <div class="col-8 col-sm-8 col-md-10 col-lg-12 col-xl-12">
+                                    <select class="form-control" id="sensori">
+                                        <option selected>Seleziona Sensore</option>
+                                        {% for s in sensors %}
+                                            <option value="{{ s.id }}">{{ s }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-6 col-lg-12">
                         <div class="form-group">
                             <div class="row">
@@ -41,7 +67,7 @@
                                 </div>
                                 <div class='col-8 col-sm-8 col-md-8 col-lg-12 col-xl-12'>
                                     <input class="form-control" type="datetime-local" value=""
-                                           id="datetime-input-start">
+                                           id="inizio">
                                 </div>
                             </div>
                         </div>
@@ -53,7 +79,7 @@
                                     <label for="datetime-input-end" class="form-label">Data e Ora Fine:</label>
                                 </div>
                                 <div class='col-8 col-sm-8 col-md-8 col-lg-12 col-xl-12'>
-                                    <input class="form-control" type="datetime-local" value="" id="datetime-input-end">
+                                    <input class="form-control" type="datetime-local" value="" id="fine">
                                 </div>
                             </div>
                         </div>
@@ -61,7 +87,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <button class="btn btn-primary" id="select-chart-button" type="button">Seleziona</button>
+                        <button class="btn btn-primary" id="bottoneGrafico" type="button">Seleziona</button>
                     </div>
                 </div>
             </div>
@@ -74,6 +100,6 @@
         </div>
     </div>
 
+
+
 {% endblock %}
-
-
