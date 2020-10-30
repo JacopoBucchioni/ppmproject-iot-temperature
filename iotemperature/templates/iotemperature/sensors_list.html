@@ -1,0 +1,67 @@
+{% extends 'iotemperature/base.html' %}
+
+{% block content %}
+    <div class="container">
+
+        {% if user.is_authenticated %}
+            <div class="row justify-content-center" id="rowForm">
+                <div class="col-11 col-sm-11 col-md-9 col-lg-6 col-xl-5">
+
+                    <div class="card mt-3 shadow rounded">
+                        <div class="card-body">
+                            <form method="POST" id="sensorForm" data-url="{% url 'sensors_list' %}">
+                                {% csrf_token %}
+                                {% for field in form %}
+                                    <div class="form-group">
+                                        <label for="{{ field.auto_id }}"
+                                               class="bmd-label-floating">{{ field.label }}</label>
+                                        {{ field }}
+                                        {% if form.errors %}
+                                            {% for error in field.errors %}
+                                                <span class="error text-danger">{{ error|escape }}</span>
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                                <div class="row justify-content-center">
+                                    <button class="btn btn-primary" type="submit">Aggiungi Sensore
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        {% endif %}
+
+
+
+        {% for s in sensors %}
+            <div class="row justify-content-center">
+                <div class="col-11 col-sm-11 col-md-9 col-lg-6 col-xl-5">
+                    <div class="card mt-3 text-center shadow rounded">
+                        <div class="card-body">
+                            <h3 class="card-title"><a href="{% url 'sensor_edit' pk=s.pk %}">{{ s }}</a></h3>
+                            {% if s.friendlyName %}
+                                <p class="card-text mb-0"><small
+                                        class="text-muted">{{ s.IPAddress }}</small></p>
+                            {% endif %}
+                            {% if s.cluster %}
+                                <p class="card-text mb-0"><small
+                                        class="text-muted">{{ s.cluster }}</small></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <br>
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    {% load static %}
+    <script src="{% static 'iotemperature/js/sensors_list.js' %}"></script>
+{% endblock scripts %}
