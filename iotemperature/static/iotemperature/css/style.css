@@ -1,9 +1,4 @@
 /* CSS Document */
-@import url('https://fonts.googleapis.com/css?family=Raleway');
-
-html,h1,h2,h3,h4,h5,h6,a{
- font-family: "Raleway";
-}
 
 body {
 	background-color: #f4f4f4 !important;
@@ -50,6 +45,10 @@ body {
 	margin-bottom: 0;
 }
 
+#cluster {
+	margin-bottom: 0;
+}
+
 #sensor-data {
 	margin-top: 5px;
 	margin-bottom: 15px;
@@ -59,9 +58,7 @@ body {
 	padding: 8px;
 }
 
-#bottone-grafico {
 
-}
 /* END MIS CARD STYLE */
 
 .close {
@@ -76,3 +73,8 @@ body {
 .form-check {
 	margin-top: 10px;
 }
+
+form {
+	margin-bottom: 0;
+}
+
