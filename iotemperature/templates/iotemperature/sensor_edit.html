@@ -1,0 +1,47 @@
+{% extends 'iotemperature/base.html' %}
+{% block content %}
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-11 col-sm-11 col-md-9 col-lg-6 col-xl-5">
+                <div class="card mt-3 shadow rounded">
+                    <div class="card-body">
+
+                        <form method="POST">{% csrf_token %}
+                            {% for field in form %}
+                                <div class="form-group">
+                                    <label for="{{ field.auto_id }}"
+                                           class="bmd-label-floating">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if form.errors %}
+                                        {% for error in field.errors %}
+                                            <span class="error text-danger">{{ error|escape }}</span>
+
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+
+                            <div class="row justify-content-left">
+                                <button type="button" class="btn btn-secondary mt-2"
+                                        onclick="javascript:history.back();">Annulla
+                                </button>
+                                {% if user.is_authenticated %}
+                                    <button type="submit" class="btn btn-primary mt-2">Modifica
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+{% block scripts %}
+    {% load static %}
+
+{% endblock scripts %}
