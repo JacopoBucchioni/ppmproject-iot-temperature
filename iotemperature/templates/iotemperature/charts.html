@@ -1,18 +1,12 @@
 {% extends 'iotemperature/base.html' %}
+
+{% block stylesheet %}
+    <!-- bootstrap-select CSS -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+{% endblock stylesheet %}
+
 {% block content %}
-
-    <script>
-        var misurazioni = {{misurazoni|safe}};
-        console.log(misurazioni);
-    </script>
-
-    {% load static %}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
-    <script src="{% static 'iotemperature/js/myCharts.js' %}"></script>
-
-
-
-
     <div class="container-fluid" style="padding-top: 15px;">
         <div class="row">
 
@@ -26,10 +20,13 @@
                                     <label for="sensori">Seleziona Sensore:</label>
                                 </div>
                                 <div class="col-8 col-sm-8 col-md-10 col-lg-12 col-xl-12">
-                                    <select class="form-control" id="sensori">
-                                        <option selected>Seleziona Sensore</option>
+                                    <select class="selectpicker form-control show-tick" id="sensori" data-style="" data-styleBase="form-control" data-showSubtext="True" title="Seleziona Sensore">
                                         {% for s in sensors %}
-                                            <option value="{{ s.id }}">{{ s }}</option>
+                                            {% if s.friendlyName %}
+                                                <option value="{{ s.id }}" data-subtext="{{ s.IPAddress }}">{{ s }}</option>
+                                            {% else %}
+                                                <option value="{{ s.id }}">{{ s }}</option>
+                                            {% endif %}
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -79,9 +76,22 @@
                 <canvas id="mychart"></canvas>
             </div>
 
+
         </div>
     </div>
+{% endblock content %}
 
 
-
-{% endblock %}
+{% block scripts %}
+    <script>
+        var misurazioni = {{misurazoni|safe}};
+        // console.log(misurazioni);
+    </script>
+    <!-- bootstrap-select JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    {% load static %}
+    <!-- MyJavaScript Chart File -->
+    <script src="{% static 'iotemperature/js/myCharts.js' %}"></script>
+{% endblock scripts %}
