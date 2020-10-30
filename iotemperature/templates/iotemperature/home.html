@@ -1,0 +1,15 @@
+{% extends 'iotemperature/base.html' %}
+
+{% block stylesheet %}
+{% endblock stylesheet %}
+
+{% block content %}
+    <div class="container" id="online-sensor">
+
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    {% load static %}
+    <script src="{% static 'iotemperature/js/main.js' %}"></script>
+{%  endblock scripts %}
