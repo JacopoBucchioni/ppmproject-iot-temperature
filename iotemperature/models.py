@@ -11,8 +11,8 @@ class Cluster(models.Model):
 
 
 class Sensor(models.Model):
-    IPAddress = models.GenericIPAddressField(blank=False, unique=True)
-    friendlyName = models.CharField(max_length=200, blank=True)
+    friendlyName = models.CharField(max_length=200, blank=True, verbose_name="Nome")
+    IPAddress = models.GenericIPAddressField(blank=False, unique=True, verbose_name="Indirizzo IP")
     cluster = models.ForeignKey(Cluster, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
