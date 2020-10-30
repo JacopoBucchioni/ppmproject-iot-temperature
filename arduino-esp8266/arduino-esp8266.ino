@@ -3,16 +3,18 @@
 #define DHTTYPE DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
+const long updateInterval = 5000; // in ms
+
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 // Define NTP Client to get time
-const long utcOffset = 7200;
+const long utcOffset = 3600;
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "it.pool.ntp.org", utcOffset);
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
-#define SERVER_IP "192.168.43.79" // LAN = 192.168.188.63   WiFi = 192.168.188.71   HOTSPOT = 192.168.43.79
+#define SERVER_IP "192.168.188.63" // LAN = 192.168.188.63   WiFi = 192.168.188.71   HOTSPOT = 192.168.43.79
 //#define SERVER_HOST "http://iotemperature.pythonanywhere.com" // SERVER_HOST
 const char* ssid = "skynet";
 const char* password = "Bnqm2PE4";
@@ -54,9 +56,8 @@ void loop() {
     HTTPClient http;
     
     Serial.print("[HTTP] begin...\n");
-    // configure traged server and url
     http.begin(client, SERVER_IP, 8000, "/update/"); //HTTP
-    // http.begin(client, SERVER_HOST"/update/");
+    //http.begin(client, SERVER_HOST"/update/");
 
     http.addHeader("Content-Type", "application/json");
     Serial.print("[HTTP] POST...\n");
@@ -95,7 +96,7 @@ void loop() {
     http.end();
   }
 
-  delay(10000);
+  delay(updateInterval);
 }
 
 
