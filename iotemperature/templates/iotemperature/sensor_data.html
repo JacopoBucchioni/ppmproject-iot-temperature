@@ -1,0 +1,48 @@
+{% extends 'iotemperature/base.html' %}
+{% block content %}
+    <div class="container">
+
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-5">
+                <div class="card mt-3 text-center shadow rounded">
+                    <div class="card-body" style="padding-bottom: 10px;">
+
+
+                        <h3 class="card-title">{{ sensor }}</h3>
+                        {% if sensor.friendlyName %}
+                            <p class="card-text mb-0"><small
+                                    class="text-muted">{{ sensor.IPAddress }}</small></p>
+                        {% endif %}
+                        {% if sensor.cluster %}
+                            <p class="card-text mb-0"><small
+                                    class="text-muted">{{ sensor.cluster }}</small></p>
+                        {% endif %}
+                        <p class="card-text" id="my-data" style="margin-top: 5px; margin-bottom: 15px;">OFFLINE</p>
+
+
+
+                        <button class="btn btn-primary">
+                            Configura
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-md-12 col-lg-10" style="padding-left: 4px; padding-right: 4px;">
+                <div class="card mt-3 mb-3 shadow rounded">
+                    <canvas id="sensor-chart" style="max-height: 440px;"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock content %}
+
+
+{% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    {% load static %}
+    <script src="{% static 'iotemperature/js/sensor_data.js' %}"></script>
+{% endblock scripts %}
