@@ -4,9 +4,22 @@ from . import views
 
 
 urlpatterns = [
-    path('', views.get_mis, name='misurazioni'),
+    path('', views.home, name='index'),
+    path('home/', views.home, name='home'),
+    # path('home/', views.get_mis, name='home'),
+    path('home/sensor/<int:pk>/', views.sensor_view, name='sensor_view'),
+
+    path('sensors/', views.sensors_list, name='sensors_list'),
+    path('sensors/edit/<int:pk>/', views.sensor_edit, name='sensor_edit'),
+
+    path('charts/', views.charts, name='charts'),
+    # path('cluster/', views.cluster_list, name='cluster'),
+
+
+    # AJAX
     path('update/', views.post_update, name='update'),
-    path('chart/', views.chart, name='chart'),
-    path('sensors/', views.sensors_list, name='sensors'),
-    path('clusters/', views.clusters_list, name='clusters'),
+    path('getData/', views.get_data, name='get_data'),
+    path('home/getData/', views.get_data, name='get_data'),
+    path('home/sensor/<int:pk>/getData/', views.get_sensor_data, name='get_sensor_data'),
+
 ]
