@@ -102,10 +102,12 @@ function getData(callback) {
 }
 
 function addData() {
+    /*
     console.log(mydata);
     console.log("data", mydata['date']);
     console.log("temperature", mydata['temperature']);
     console.log("humidity", mydata['humidity']);
+     */
 
     if (mydata) {
         card_data.html('temperatura: '+ mydata["temperature"] +' ℃ <br> umidità: '+ mydata["humidity"] +' % ');
