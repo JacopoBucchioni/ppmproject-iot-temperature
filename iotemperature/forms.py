@@ -16,6 +16,9 @@ class SensorForm(forms.ModelForm):
         }
 
 
+
+
+
 class ClusterForm(forms.ModelForm):
     class Meta:
         model = Cluster
