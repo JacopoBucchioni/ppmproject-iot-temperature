@@ -45,7 +45,7 @@ $(document).ready(function () {
         var csrfToken = $("input[name=csrfmiddlewaretoken]");
         var friendlyName = $("#id_friendlyName");
         var IPAddress = $("#id_IPAddress");
-        console.log(form.data('url'))
+        //console.log(form.data('url'))
 
         $.ajax({
             type: 'POST',
