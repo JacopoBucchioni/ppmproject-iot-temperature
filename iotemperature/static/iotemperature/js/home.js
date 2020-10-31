@@ -29,11 +29,15 @@ function appendData() {
         //TODO: hide <p> with big text ""NESSUN SENSORE ONLINE"
 
         for (var i in mydata){
+            var date = new Date(mydata[i]["date"]).toLocaleString();
+            console.log('mydata date',mydata[i]["date"]);
+            console.log('js date', date);
+
             if ($("#"+i).length){//TODO: aggiornare solo i dati e non ristampare tutta la card
                 console.log("l'elemento esite, viene aggiornato");
-                $("#"+i+"-data").html('temperatura: ' + mydata[i]["temperature"] + ' ℃ <br> umidità: ' + mydata[i]["humidity"] + ' %');
-                $("#"+i+"-last-update").html('Last update: ' + mydata[i]["date"]);
 
+                $("#"+i+"-data").html('temperatura: ' + mydata[i]["temperature"] + ' ℃ <br> umidità: ' + mydata[i]["humidity"] + ' %');
+                $("#"+i+"-last-update").html('Last update: ' + date);
 
             } else {
                 console.log("elemento creato per la prima volta");
@@ -48,7 +52,7 @@ function appendData() {
                         '                            <p class="card-text" id="'+i+'-data" style="margin-top: 5px; margin-bottom: 15px;">temperatura: ' + mydata[i]["temperature"] + ' ℃ <br> umidità: ' + mydata[i]["humidity"] + ' % </p>\n' +
                         '                        </div>\n' +
                         '                        <div class="card-footer">\n' +
-                        '                            <p class="card-text"><small class="text-muted" id="'+i+'-last-update">Last update: ' + mydata[i]["date"] + '</small></p>\n' +
+                        '                            <p class="card-text"><small class="text-muted" id="'+i+'-last-update">Last update: ' + date + '</small></p>\n' +
                         '                        </div>\n' +
                         '                    </div>\n' +
                         '                </div>\n' +
@@ -62,7 +66,7 @@ function appendData() {
                         '                            <p class="card-text" id="'+i+'-data" style="margin-top: 5px; margin-bottom: 15px;">temperatura: ' + mydata[i]["temperature"] + ' ℃ <br> umidità: ' + mydata[i]["humidity"] + ' % </p>\n' +
                         '                        </div>\n' +
                         '                        <div class="card-footer">\n' +
-                        '                            <p class="card-text"><small class="text-muted" id="'+i+'-last-update">Last update: ' + mydata[i]["date"] + '</small></p>\n' +
+                        '                            <p class="card-text"><small class="text-muted" id="'+i+'-last-update">Last update: ' + date + '</small></p>\n' +
                         '                        </div>\n' +
                         '                    </div>\n' +
                         '                </div>\n' +
