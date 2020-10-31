@@ -56,8 +56,9 @@ void loop() {
     HTTPClient http;
     
     Serial.print("[HTTP] begin...\n");
-    http.begin(client, SERVER_IP, 8000, "/update/"); // SERVER LOCALHOST
-    //http.begin(client, SERVER_HOST"/update/");     // SERVER HOST
+
+    http.begin(client, SERVER_IP, 8000, "/update/"); // LOCALHOST
+    //http.begin(client, SERVER_HOST"/update/");     // SERVER_HOST
 
     http.addHeader("Content-Type", "application/json");
     Serial.print("[HTTP] POST...\n");
