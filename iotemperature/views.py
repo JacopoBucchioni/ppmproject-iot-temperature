@@ -18,11 +18,6 @@ def home(request):
     return render(request, 'iotemperature/home.html')
 
 
-def sensor_view(request, pk):
-    sensor = get_object_or_404(Sensor, pk=pk)
-    return render(request, 'iotemperature/sensor_data.html', context={'sensor': sensor})
-
-
 def get_data(request):
     if request.is_ajax():
         # print(online)
@@ -30,6 +25,11 @@ def get_data(request):
             return HttpResponse()
         else:
             return JsonResponse(online)
+
+
+def sensor_view(request, pk):
+    sensor = get_object_or_404(Sensor, pk=pk)
+    return render(request, 'iotemperature/sensor_data.html', context={'sensor': sensor})
 
 
 def get_sensor_data(request, pk):
@@ -48,12 +48,11 @@ def post_update(request):
             sensor = Sensor.objects.get(IPAddress=json_data['IPAddress'])
             sensor_dict = model_to_dict(sensor, fields=['id', 'friendlyName', 'cluster'])
             # print(sensor_dict)
-            date = datetime.strptime(json_data['date'], '%Y/%m/%dT%H:%M:%S')
+            date = datetime.strptime(json_data['date'], '%Y-%m-%dT%H:%M:%S')
             if date <= datetime.now():
                 Misurazione.objects.create(id=None, sensor=sensor, temperature=json_data['temperature'],
                                            humidity=json_data['humidity'], date=date)
                 json_data['sensor'] = sensor_dict
-                json_data['date_datetime'] = date
                 online['sensor_' + str(sensor.id)] = json_data
                 '''
                 print('json_data:')
