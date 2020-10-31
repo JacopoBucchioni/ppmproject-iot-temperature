@@ -121,12 +121,13 @@ function addData() {
             var date = new Date(online["date"]);
             if ((new Date().getTime() - date.getTime()) > 30000) {
                 card_data.html('OFFLINE');
-                if (window.myLine.data.labels.length && window.myLine.data.datasets[0].data.length && window.myLine.data.datasets[1].data.length) {
-                    window.myLine.data.labels.shift();
-                    window.myLine.data.datasets[0].data.shift();
-                    window.myLine.data.datasets[1].data.shift();
+                //if (window.myLine.data.labels.length && window.myLine.data.datasets[0].data.length && window.myLine.data.datasets[1].data.length) {
+                    window.myLine.data.labels = [];
+                    window.myLine.data.datasets[0].data = [];
+                    window.myLine.data.datasets[1].data = [];
                     window.myLine.update();
-                }
+                    updateCount = 0;
+                //}
             }
         } else {
             mydata = online;
