@@ -39,7 +39,7 @@ function appendData() {
             var date = new Date(online[i]["date"]);
             //console.log('mydata date',mydata[i]["date"]);
             //console.log('js date', date);
-            if ((new Date().getTime() - date.getTime()) > 60000) {  // se la data dell'ultima misurazione (provoniente da online->response->mydata) ha un delta di più di 5 min (300000ms) dall'ora corrente cancella la card del sensore che viene considerato offline
+            if ((new Date().getTime() - date.getTime()) > 30000) {  // se la data dell'ultima misurazione (provoniente da online->response->mydata) ha un delta di più di 1 min (60000ms) dall'ora corrente cancella la card del sensore che viene considerato offline
 
                 if (sensorCard.length) {
                     console.log("l'elemento esite e viene cancellato");
