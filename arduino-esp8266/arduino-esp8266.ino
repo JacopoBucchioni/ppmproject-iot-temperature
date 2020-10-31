@@ -14,7 +14,7 @@ NTPClient timeClient(ntpUDP, "it.pool.ntp.org", utcOffset);
 
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
-#define SERVER_IP "192.168.188.63" // LAN = 192.168.188.63   WiFi = 192.168.188.71   HOTSPOT = 192.168.43.79
+#define SERVER_IP "192.168.188.71" // LAN = 192.168.188.63   WiFi = 192.168.188.71   HOTSPOT = 192.168.43.79
 //#define SERVER_HOST "http://iotemperature.pythonanywhere.com" // SERVER_HOST
 const char* ssid = "skynet";
 const char* password = "Bnqm2PE4";
@@ -56,8 +56,8 @@ void loop() {
     HTTPClient http;
     
     Serial.print("[HTTP] begin...\n");
-    http.begin(client, SERVER_IP, 8000, "/update/"); //HTTP
-    //http.begin(client, SERVER_HOST"/update/");
+    http.begin(client, SERVER_IP, 8000, "/update/"); // SERVER LOCALHOST
+    //http.begin(client, SERVER_HOST"/update/");     // SERVER HOST
 
     http.addHeader("Content-Type", "application/json");
     Serial.print("[HTTP] POST...\n");
@@ -124,5 +124,5 @@ String getFullFormattedTime(NTPClient timeClient) {
   uint8_t seconds = ti->tm_sec;
   String secondStr = seconds < 10 ? "0" + String(seconds) : String(seconds);
 
-  return yearStr + "/" + monthStr + "/" + dayStr + "T" + hoursStr + ":" + minuteStr + ":" + secondStr;
+  return yearStr + "-" + monthStr + "-" + dayStr + "T" + hoursStr + ":" + minuteStr + ":" + secondStr;
 }
