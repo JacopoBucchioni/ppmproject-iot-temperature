@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 import json
 from django.core import serializers
@@ -16,19 +16,6 @@ online = {}
 
 def home(request):
     return render(request, 'iotemperature/home.html')
-
-
-def get_mis(request):  # ritorna l'ultima misurazione salvata nel DB (se esite) per ogni sensore registrato
-    mis = []
-    sensors_pk = list(set(Misurazione.objects.values_list('sensor', flat=True)))
-    for i in range(len(sensors_pk)):
-        m = Misurazione.objects.filter(sensor=sensors_pk[i]).latest('date')
-        mis.append(m)
-    mis.sort(key=lambda x: x.date, reverse=True)
-
-    #print(sensors_pk)
-
-    return render(request, 'iotemperature/main.html', context={'mis': mis, 'sensors': sensors_pk})
 
 
 def sensor_view(request, pk):
@@ -62,16 +49,19 @@ def post_update(request):
             sensor_dict = model_to_dict(sensor, fields=['id', 'friendlyName', 'cluster'])
             # print(sensor_dict)
             date = datetime.strptime(json_data['date'], '%Y/%m/%dT%H:%M:%S')
-            if date <= datetime.now():  # TODO: to test
-                Misurazione.objects.create(id=None, sensor=sensor, temperature=json_data['temperature'], humidity=json_data['humidity'], date=date)
+            if date <= datetime.now():
+                Misurazione.objects.create(id=None, sensor=sensor, temperature=json_data['temperature'],
+                                           humidity=json_data['humidity'], date=date)
                 json_data['sensor'] = sensor_dict
                 json_data['date_datetime'] = date
-                online['sensor_'+str(sensor.id)] = json_data
+                online['sensor_' + str(sensor.id)] = json_data
+                '''
                 print('json_data:')
                 print(json_data)
                 print()
                 print('online:')
                 print(online)
+                '''
                 return HttpResponse('OK Misurazione Registrata')
 
             else:
@@ -79,20 +69,6 @@ def post_update(request):
 
         else:
             return HttpResponse('Indirizzo IP non Registrato')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def sensors_list(request):
@@ -118,23 +94,17 @@ def sensors_list(request):
     return render(request, 'iotemperature/sensors_list.html', context={'sensors': sensors, 'form': form})
 
 
-
 def sensor_edit(request, pk):
     sensor = get_object_or_404(Sensor, pk=pk)
     if request.method == "POST":
         sensor_form = SensorForm(request.POST, instance=sensor)
         if sensor_form.is_valid():
-            sensor = sensor_form.save()
+            sensor_form.save()
             return redirect('sensors_list')
-
     else:
         sensor_form = SensorForm(instance=sensor)
 
     return render(request, 'iotemperature/sensor_edit.html', context={'form': sensor_form})
-
-
-
-
 
 
 def charts(request):
@@ -147,6 +117,21 @@ def charts(request):
     return render(request, 'iotemperature/charts.html', context={'sensors': sensors, 'misurazoni': misurazioni})
 
 
+'''
+def get_mis(request):  # ritorna l'ultima misurazione salvata nel DB (se esite) per ogni sensore registrato
+    mis = []
+    sensors_pk = list(set(Misurazione.objects.values_list('sensor', flat=True)))
+    for i in range(len(sensors_pk)):
+        m = Misurazione.objects.filter(sensor=sensors_pk[i]).latest('date')
+        mis.append(m)
+    mis.sort(key=lambda x: x.date, reverse=True)
+
+    #print(sensors_pk)
+
+    return render(request, 'iotemperature/main.html', context={'mis': mis, 'sensors': sensors_pk})
+
+
 def clusters_list(request):
     clusters = Cluster.objects.all()
     return render(request, 'iotemperature/clusters.html', context={'clusters': clusters})
+'''
