@@ -118,7 +118,7 @@ function addData() {
 
 
         if (JSON.stringify(online) === JSON.stringify(mydata)) {
-            var date = new Date(online[i]["date"]);
+            var date = new Date(online["date"]);
             if ((new Date().getTime() - date.getTime()) > 30000) {
                 card_data.html('OFFLINE');
                 if (window.myLine.data.labels.length && window.myLine.data.datasets[0].data.length && window.myLine.data.datasets[1].data.length) {
