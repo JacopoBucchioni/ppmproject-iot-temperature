@@ -29,11 +29,22 @@ body {
 /* END NAVBAR */
 
 
+
+
+
 /* CARD STYLE */
 .card .card-title {
 	margin-bottom: 0px;
 }
+
+.card .card-footer {
+	padding: 8px;
+}
 /* END CARD STYLE */
+
+
+
+
 
 
 /* MIS CARD STYLE */
@@ -53,13 +64,12 @@ body {
 	margin-top: 5px;
 	margin-bottom: 15px;
 }
-
-.card .card-footer {
-	padding: 8px;
-}
-
-
 /* END MIS CARD STYLE */
+
+
+
+
+
 
 .close {
 	font-size: 1.8rem;
