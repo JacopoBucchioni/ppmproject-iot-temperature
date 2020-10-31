@@ -77,7 +77,7 @@ var numberElements = 50;
 //Globals
 var updateCount = 0;
 
-var mydata;
+var online;
 var card_data;
 
 
@@ -88,9 +88,9 @@ function getData(callback) {
 
         success: function (response) {
             //console.log(response);
-            if (JSON.stringify(mydata)===JSON.stringify(response)) {}
+            if (JSON.stringify(online)===JSON.stringify(response)) {}
             else {
-                mydata = response;
+                online = response;
                 callback();
             }
         },
@@ -109,22 +109,27 @@ function addData() {
     console.log("humidity", mydata['humidity']);
      */
 
-    if (mydata) {
-        card_data.html('temperatura: '+ mydata["temperature"] +' ℃ <br> umidità: '+ mydata["humidity"] +' % ');
-        window.myLine.data.labels.push(mydata["date"]);
-        window.myLine.data.datasets[0].data.push(mydata["temperature"]);
-        window.myLine.data.datasets[1].data.push(mydata["humidity"]);
+    if (online) {
+        var date = new Date(online[i]["date"]);
+        if ((new Date().getTime() - date.getTime()) > 60000) {
+            card_data.html('OFFLINE');
+        } else {
+            card_data.html('temperatura: ' + online["temperature"] + ' ℃ <br> umidità: ' + online["humidity"] + ' % ');
+            window.myLine.data.labels.push(online["date"]);
+            window.myLine.data.datasets[0].data.push(online["temperature"]);
+            window.myLine.data.datasets[1].data.push(online["humidity"]);
 
-        if (updateCount > numberElements) {
-            window.myLine.data.labels.shift();
-            window.myLine.data.datasets[0].data.shift();
-            window.myLine.data.datasets[1].data.shift();
+            if (updateCount > numberElements) {
+                window.myLine.data.labels.shift();
+                window.myLine.data.datasets[0].data.shift();
+                window.myLine.data.datasets[1].data.shift();
 
-        } else updateCount++;
+            } else updateCount++;
 
-        window.myLine.update();
+            window.myLine.update();
 
-        //console.log(window.myLine);
+            //console.log(window.myLine);
+        }
     }
 }
 
