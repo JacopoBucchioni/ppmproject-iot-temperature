@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '^zqipnh)==68a@^6t_h-#o_1t#fzjb-d#ym^d##ix6f@(7+0u8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', '.pythonanywhere.com', '192.168.188.63', '192.168.188.71', '192.168.43.79']  # LAN, WiFi, HOTSPOT
 
