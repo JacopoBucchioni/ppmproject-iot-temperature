@@ -4,7 +4,6 @@ from django.shortcuts import get_object_or_404
 import json
 from django.core import serializers
 from datetime import datetime
-from django.utils import timezone
 from django.forms.models import model_to_dict
 from .models import Sensor, Cluster, Misurazione
 from .forms import SensorForm, ClusterForm
@@ -12,6 +11,19 @@ from .forms import SensorForm, ClusterForm
 # Create your views here.
 
 online = {}
+
+
+def is_offline(pk: int = 0):  # se la data dell'ultima misurazione salvata in online è più vecchia di offlineInterval rispetto all'ora corrente il sensore che viene considerato offline e messo a None
+    offlineInterval = 30  # in seconds
+    if pk:
+        if online['sensor_' + str(pk)]:
+            if (datetime.now() - online['sensor_' + str(pk)]['date']).seconds > offlineInterval:
+                online['sensor_' + str(pk)] = None
+    else:
+        for i in online:
+            if online[str(i)]:
+                if (datetime.now() - online[str(i)]['date']).seconds > offlineInterval:
+                    online[str(i)] = None
 
 
 def home(request):
@@ -24,7 +36,8 @@ def get_data(request):
         if online == {}:
             return HttpResponse()
         else:
-            return JsonResponse(online)
+            is_offline()
+            return JsonResponse(online, safe=False)
 
 
 def sensor_view(request, pk):
@@ -35,7 +48,8 @@ def sensor_view(request, pk):
 def get_sensor_data(request, pk):
     if request.is_ajax():
         if ('sensor_' + str(pk)) in online:
-            return JsonResponse(online['sensor_' + str(pk)])
+            is_offline(pk)
+            return JsonResponse(online['sensor_' + str(pk)], safe=False)
         else:
             return HttpResponse()
 
@@ -53,7 +67,9 @@ def post_update(request):
                 Misurazione.objects.create(id=None, sensor=sensor, temperature=json_data['temperature'],
                                            humidity=json_data['humidity'], date=date)
                 json_data['sensor'] = sensor_dict
+                json_data['date'] = date
                 online['sensor_' + str(sensor.id)] = json_data
+
                 '''
                 print('json_data:')
                 print(json_data)
@@ -61,6 +77,7 @@ def post_update(request):
                 print('online:')
                 print(online)
                 '''
+
                 return HttpResponse('OK Misurazione Registrata')
 
             else:
