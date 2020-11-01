@@ -78,7 +78,6 @@ var numberElements = 8;
 var updateCount = 0;
 
 var online;
-var mydata;
 var card_data;
 
 
@@ -89,15 +88,12 @@ function getData(callback) {
 
         success: function (response) {
             //console.log(response);
-            /*
+
             if (JSON.stringify(online)===JSON.stringify(response)) {}
             else {
                 online = response;
                 callback();
             }
-             */
-            online = response;
-            callback();
 
         },
         error: function (error) {
@@ -108,7 +104,9 @@ function getData(callback) {
 }
 
 function addData() {
+
     if (online) {
+        console.log('online non vuoto', online);
         /*
         console.log(mydata);
         console.log("data", mydata['date']);
@@ -116,37 +114,33 @@ function addData() {
         console.log("humidity", mydata['humidity']);
          */
 
+        card_data.html('temperatura: ' + online["temperature"] + ' ℃ <br> umidità: ' + online["humidity"] + ' % ');
+        window.myLine.data.labels.push(online["date"]);
+        window.myLine.data.datasets[0].data.push(online["temperature"]);
+        window.myLine.data.datasets[1].data.push(online["humidity"]);
 
-        if (JSON.stringify(online) === JSON.stringify(mydata)) {
-            var date = new Date(online["date"]);
-            if ((new Date().getTime() - date.getTime()) > 30000) {
-                card_data.html('OFFLINE');
-                //if (window.myLine.data.labels.length && window.myLine.data.datasets[0].data.length && window.myLine.data.datasets[1].data.length) {
-                    window.myLine.data.labels = [];
-                    window.myLine.data.datasets[0].data = [];
-                    window.myLine.data.datasets[1].data = [];
-                    window.myLine.update();
-                    updateCount = 0;
-                //}
-            }
-        } else {
-            mydata = online;
-            card_data.html('temperatura: ' + mydata["temperature"] + ' ℃ <br> umidità: ' + mydata["humidity"] + ' % ');
-            window.myLine.data.labels.push(mydata["date"]);
-            window.myLine.data.datasets[0].data.push(mydata["temperature"]);
-            window.myLine.data.datasets[1].data.push(mydata["humidity"]);
+        if (updateCount > numberElements) {
+            window.myLine.data.labels.shift();
+            window.myLine.data.datasets[0].data.shift();
+            window.myLine.data.datasets[1].data.shift();
 
-            if (updateCount > numberElements) {
-                window.myLine.data.labels.shift();
-                window.myLine.data.datasets[0].data.shift();
-                window.myLine.data.datasets[1].data.shift();
+        } else updateCount++;
 
-            } else updateCount++;
+        window.myLine.update();
 
-            window.myLine.update();
+        //console.log(window.myLine);
+        // }
+    } else {
+        console.log('online vuoto', online);
 
-            //console.log(window.myLine);
-        }
+        card_data.html('OFFLINE');
+        //if (window.myLine.data.labels.length && window.myLine.data.datasets[0].data.length && window.myLine.data.datasets[1].data.length) {
+        window.myLine.data.labels = [];
+        window.myLine.data.datasets[0].data = [];
+        window.myLine.data.datasets[1].data = [];
+        window.myLine.update();
+        updateCount = 0;
+        //}
     }
 }
 
