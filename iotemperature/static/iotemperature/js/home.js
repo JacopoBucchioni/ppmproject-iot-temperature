@@ -12,15 +12,13 @@ function getData(callback) {
 
         success: function (response) {
             //console.log(response);
-            /*
-            if (JSON.stringify(online) === JSON.stringify(response)) { }
-            else {
+
+            if (JSON.stringify(online) === JSON.stringify(response)) {
+
+            } else {
                 online = response;
                 callback();
             }
-             */
-            online = response;
-            callback();
 
         },
         error: function (error) {
@@ -30,24 +28,17 @@ function getData(callback) {
 }
 
 function appendData() {
-    //console.log('mydata', mydata);
+
     if (online) {
+        console.log('online != {}', online);
         //TODO: hide <p> with big text ""NESSUN SENSORE ONLINE"
 
         for (var i in online) {
             var sensorCard = $("#" + i);
-            var date = new Date(online[i]["date"]);
-            //console.log('mydata date',mydata[i]["date"]);
-            //console.log('js date', date);
-            if ((new Date().getTime() - date.getTime()) > 30000) {  // se la data dell'ultima misurazione (provoniente da online->response->mydata) ha un delta di più di 1 min (60000ms) dall'ora corrente cancella la card del sensore che viene considerato offline
 
-                if (sensorCard.length) {
-                    console.log("l'elemento esite e viene cancellato");
+            if (online[i]) {
+                var date = new Date(online[i]["date"]);
 
-                    sensorCard.remove();
-                }
-
-            } else {
                 if (sensorCard.length) {
                     console.log("l'elemento esite già e viene solo aggiornato");
 
@@ -88,10 +79,16 @@ function appendData() {
                             '            </div>');
                     }
                 }
+            } else {
+                if (sensorCard.length) {
+                    console.log("l'elemento esite e viene cancellato");
+
+                    sensorCard.remove();
+                }
             }
         }
     } else {
-        console.log("NESSUN SENSORE ONLINE")
+        console.log("NESSUN SENSORE ONLINE online=={}", online);
     }
 }
 
