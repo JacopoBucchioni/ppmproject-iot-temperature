@@ -1,3 +1,4 @@
+
 var config = {
     type: 'line',
     data: {
@@ -67,7 +68,10 @@ var config = {
 
 };
 
+
 window.onload = function () {
+    $.fn.selectpicker.Constructor.BootstrapVersion = '4';
+
     var ctx = document.getElementById('mychart').getContext('2d');
     window.myLine = Chart.Line(ctx, config);
 };
@@ -87,9 +91,30 @@ function getMisurazioni(callback) {
             });
         }
 
+Date.prototype.toIsoString = function() {
+    var tzo = -this.getTimezoneOffset(),
+        dif = tzo >= 0 ? '+' : '-',
+        pad = function(num) {
+            var norm = Math.floor(Math.abs(num));
+            return (norm < 10 ? '0' : '') + norm;
+        };
+    return this.getFullYear() +
+        '-' + pad(this.getMonth() + 1) +
+        '-' + pad(this.getDate()) +
+        'T' + pad(this.getHours()) +
+        ':' + pad(this.getMinutes()) +
+        ':' + pad(this.getSeconds()) +
+        dif + pad(tzo / 60) +
+        ':' + pad(tzo % 60);
+}
+
 $(document).ready(function () {
-    var date = new Date().toISOString();
-    date = date.substring(0, date.length - 8);
+    var misurazioni;
+
+    var date = new Date().toIsoString();
+    //console.log(date);
+    date = date.substring(0, date.length - 9);
+    //console.log(date);
     $("#inizio")[0].max = date;
     $("#fine")[0].max = date;
 
@@ -99,10 +124,12 @@ $(document).ready(function () {
         var inizio = $("#inizio")[0].value;
         var fine = $("#fine")[0].value;
 
-
         if (id_sensore) {
-            getMisurazioni(function () {
+            $.getJSON("getData/", function (data) {
+
+                misurazioni = JSON.parse(data);
                 //console.log('misurazioni!!', misurazioni);
+
                 window.myLine.data.labels = [];
                 window.myLine.data.datasets.forEach((dataset) => {
                     dataset.data = [];
