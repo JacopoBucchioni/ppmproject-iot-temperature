@@ -1,24 +1,24 @@
+//Configuration variables
+
 var config = {
     type: 'line',
     data: {
         labels: [],
         datasets: [
             {
-                label: 'Temperatura',
-                fill: false,
+                label: 'temperatura °C',
+                data: [],
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
-                data: [],
-                yAxisID: 'y-axis-1',
+                fill: false,
             },
 
             {
-                label: 'Umidità',
-                fill: false,
+                label: 'umidità %',
+                data: [],
                 backgroundColor: 'rgb(54, 162, 235)',
                 borderColor: 'rgb(54, 162, 235)',
-                data: [],
-                yAxisID: 'y-axis-2'
+                fill: false,
             }
         ]
     },
@@ -26,53 +26,50 @@ var config = {
     options: {
         responsive: true,
 
-        hoverMode: 'index',
-        stacked: false,
+        //hoverMode: 'index',
+        //stacked: true,
 
         scales: {
             xAxes: [{
-                display: true
+                display: true,
+                type: 'time',
+                time: {
+                    displayFormats: {
+                        second: 'h:mm:ss'
+                    }
+                },
+                ticks: {
+                    source: 'data'
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Time'
+                }
+
             }],
             yAxes: [{
                 display: true,
-                type: 'linear',
-                position: 'left',
-                id: 'y-axis-1',
+                //type: 'linear',
                 ticks: {
-                    beginAtZero: true,
-                    callback: function (value, index, values) {
-                        return value + '°C';
-                    }
-                }
-            }, {
-                display: true,
-                type: 'linear',
-                position: 'right',
-                id: 'y-axis-2',
-                ticks: {
-                    beginAtZero: true,
-                    callback: function (value, index, values) {
-                        return value + '%';
-                    }
+                    suggestedMin: -10,
+                    suggestedMax: 100
+                },
+                scaleLabel: {
+                    display: false,
+                    labelString: 'Value'
                 },
 
-                // grid line settings
                 gridLines: {
-                    drawOnChartArea: false, // only want the grid lines for one axis to show up
+                    zeroLineColor: 'rgba(245, 221, 93)',
                 },
-
             }]
         }
     }
-
 };
 
 
-
-
-//Configuration variables
 var updateInterval = 1000 //in ms
-var numberElements = 8;
+var numberElements = 10;
 
 //Globals
 var updateCount = 0;
@@ -107,15 +104,9 @@ function addData() {
 
     if (online) {
         console.log('online non vuoto', online);
-        /*
-        console.log(mydata);
-        console.log("data", mydata['date']);
-        console.log("temperature", mydata['temperature']);
-        console.log("humidity", mydata['humidity']);
-         */
 
         card_data.html('temperatura: ' + online["temperature"] + ' ℃ <br> umidità: ' + online["humidity"] + ' % ');
-        window.myLine.data.labels.push(online["date"]);
+        window.myLine.data.labels.push(new Date(online["date"]));
         window.myLine.data.datasets[0].data.push(online["temperature"]);
         window.myLine.data.datasets[1].data.push(online["humidity"]);
 
@@ -128,19 +119,17 @@ function addData() {
 
         window.myLine.update();
 
-        //console.log(window.myLine);
-        // }
+
     } else {
         console.log('online vuoto', online);
 
         card_data.html('OFFLINE');
-        //if (window.myLine.data.labels.length && window.myLine.data.datasets[0].data.length && window.myLine.data.datasets[1].data.length) {
         window.myLine.data.labels = [];
         window.myLine.data.datasets[0].data = [];
         window.myLine.data.datasets[1].data = [];
         window.myLine.update();
         updateCount = 0;
-        //}
+
     }
 }
 
@@ -151,7 +140,7 @@ function updateData(){
 
 window.onload = function () {
     var ctx = document.getElementById('sensor-chart').getContext('2d');
-    window.myLine = Chart.Line(ctx, config);
+    window.myLine = new Chart(ctx, config);
     card_data = $("#my-data");
     updateData();
 
