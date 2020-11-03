@@ -5,21 +5,23 @@ var config = {
         labels: [],
         datasets: [
             {
-                label: 'Temperatura',
-                fill: false,
+                label: 'temperatura °C',
+                data: [],
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
-                data: [],
-                yAxisID: 'y-axis-1',
+                fill: false,
+
+                pointRadius: 0,
             },
 
             {
-                label: 'Umidità',
-                fill: false,
+                label: 'umidità %',
+                data: [],
                 backgroundColor: 'rgb(54, 162, 235)',
                 borderColor: 'rgb(54, 162, 235)',
-                data: [],
-                yAxisID: 'y-axis-2'
+                fill: false,
+
+                pointRadius: 0,
             }
         ]
     },
@@ -27,39 +29,43 @@ var config = {
     options: {
         responsive: true,
 
-        hoverMode: 'index',
-        stacked: false,
+        //hoverMode: 'index',
+        //stacked: false,
 
         scales: {
             xAxes: [{
-                display: true
+                display: true,
+                type: 'time',
+                distribution: 'series',
+                time:{
+                  parser: 'MM/DD/YYYY HH:mm',
+                },
+                ticks: {
+                    source: 'auto'
+                },
+
+
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Time'
+                },
             }],
             yAxes: [{
                 display: true,
-                type: 'linear',
-                position: 'left',
-                id: 'y-axis-1',
+                // type: 'linear',
                 ticks: {
-                    beginAtZero: true,
-                    callback: function (value, index, values) {
-                        return value + '°C';
-                    }
-                }
-            }, {
-                display: true,
-                type: 'linear',
-                position: 'right',
-                id: 'y-axis-2',
-                ticks: {
-                    beginAtZero: true,
-                    callback: function (value, index, values) {
-                        return value + '%';
-                    }
+                    //beginAtZero: true,
+                    //callback: function (value, index, values) {return value + '°C';}
+                    suggestedMin: -10,
+                    suggestedMax: 100,
+                },
+                 scaleLabel: {
+                    display: false,
+                    labelString: 'Value'
                 },
 
-                // grid line settings
                 gridLines: {
-                    drawOnChartArea: false, // only want the grid lines for one axis to show up
+                    zeroLineColor: 'rgba(245, 221, 93)',
                 },
 
             }]
@@ -70,10 +76,8 @@ var config = {
 
 
 window.onload = function () {
-    $.fn.selectpicker.Constructor.BootstrapVersion = '4';
-
     var ctx = document.getElementById('mychart').getContext('2d');
-    window.myLine = Chart.Line(ctx, config);
+    window.myLine = new Chart(ctx, config);
 };
 
 function getMisurazioni(callback) {
@@ -125,10 +129,9 @@ $(document).ready(function () {
         var fine = $("#fine")[0].value;
 
         if (id_sensore) {
-            $.getJSON("getData/", function (data) {
-
+            $.getJSON("sensor/" + id_sensore + "/getData/", function (data) {
                 misurazioni = JSON.parse(data);
-                //console.log('misurazioni!!', misurazioni);
+                console.log('misurazioni!!', misurazioni);
 
                 window.myLine.data.labels = [];
                 window.myLine.data.datasets.forEach((dataset) => {
@@ -136,16 +139,18 @@ $(document).ready(function () {
                 });
                 window.myLine.update();
 
+
                 if (inizio && fine) {
-                    //console.log("sensore selezionato data inizio selezionata data fine selezionata");
                     if (inizio <= fine) {
+                        //console.log("sensore selezionato data inizio selezionata data fine selezionata");
+                        //if (inizio <= fine) {
                         var inizio_date = Date.parse(inizio);
                         var fine_date = Date.parse(fine);
 
                         for (i = 0; i < misurazioni.length; i++) {
                             var mis_date = Date.parse(misurazioni[i]["fields"].date);
-                            if (misurazioni[i]["fields"].sensor == id_sensore && mis_date <= fine_date && mis_date >= inizio_date) { //TODO: compare date in ISO String
-                                window.myLine.data.labels.push(misurazioni[i]["fields"].date);
+                            if (mis_date <= fine_date && mis_date >= inizio_date) { //TODO: compare date in ISO String
+                                window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
                                 window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
                                 window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
                             }
@@ -158,17 +163,20 @@ $(document).ready(function () {
                         $("#inizio")[0].value = "";
                         $("#fine")[0].value = "";
                     }
+
                 } else {
                     if (inizio) {
                         //console.log("sensore selezionato data inizio selezionata data fine non selezionata");
                         var inizio_date = Date.parse(inizio);
                         for (i = 0; i < misurazioni.length; i++) {
                             var mis_date = Date.parse(misurazioni[i]["fields"].date);
-                            if (misurazioni[i]["fields"].sensor == id_sensore && mis_date >= inizio_date) {
-                                window.myLine.data.labels.push(misurazioni[i]["fields"].date);
+
+                            if (mis_date >= inizio_date) { //TODO: compare date in ISO String
+                                window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
                                 window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
                                 window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
                             }
+
                         }
                         window.myLine.update();
                         //console.log(window.myLine);
@@ -177,11 +185,13 @@ $(document).ready(function () {
                         var fine_date = Date.parse(fine);
                         for (i = 0; i < misurazioni.length; i++) {
                             var mis_date = Date.parse(misurazioni[i]["fields"].date);
-                            if (misurazioni[i]["fields"].sensor == id_sensore && mis_date <= fine_date) {
-                                window.myLine.data.labels.push(misurazioni[i]["fields"].date);
+
+                            if (mis_date <= fine_date) { //TODO: compare date in ISO String
+                                window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
                                 window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
                                 window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
                             }
+
                         }
                         window.myLine.update();
                         //console.log(window.myLine);
@@ -189,23 +199,20 @@ $(document).ready(function () {
                     } else {
                         //console.log("sensore selezionato data inizio non selezionata data fine non selezionata");
                         for (i = 0; i < misurazioni.length; i++) {
-                            if (misurazioni[i]["fields"].sensor == id_sensore) {
-                                window.myLine.data.labels.push(misurazioni[i]["fields"].date);
-                                window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
-                                window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
-                            }
+
+                            window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
+                            window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
+                            window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
+
                         }
                         window.myLine.update();
                         //console.log(window.myLine);
                     }
                 }
             });
-
         } else {
             alert("Non hai selezionato alcun Sesore");
         }
-
-
     });
 
 });
