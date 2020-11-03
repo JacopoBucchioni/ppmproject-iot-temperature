@@ -21,5 +21,6 @@ urlpatterns = [
     path('getData/', views.get_data, name='get_data'),
     path('home/getData/', views.get_data, name='get_data'),
     path('home/sensor/<int:pk>/getData/', views.get_sensor_data, name='get_sensor_data'),
-    path('charts/getData/', views.get_misurazioni, name='get_misurazioni'),
+    path('charts/sensor/<int:pk>/getData/', views.get_misurazioni, name='get_misurazioni'),
+    path('sensors/delete/<int:pk>/', views.delete, name='delete'),
 ]
