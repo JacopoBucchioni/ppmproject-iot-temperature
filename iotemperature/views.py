@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404
 import json
 from django.core import serializers
@@ -33,11 +33,11 @@ def home(request):
 def get_data(request):
     if request.is_ajax():
         # print(online)
-        if online == {}:
-            return HttpResponse()
-        else:
+        if online:
             is_offline()
             return JsonResponse(online, safe=False)
+
+    return HttpResponse()
 
 
 def sensor_view(request, pk):
@@ -50,8 +50,8 @@ def get_sensor_data(request, pk):
         if ('sensor_' + str(pk)) in online:
             is_offline(pk)
             return JsonResponse(online['sensor_' + str(pk)], safe=False)
-        else:
-            return HttpResponse()
+
+    return HttpResponse()
 
 
 def post_update(request):
@@ -64,19 +64,12 @@ def post_update(request):
             # print(sensor_dict)
             date = datetime.strptime(json_data['date'], '%Y-%m-%dT%H:%M:%S')
             if date <= datetime.now():
-                Misurazione.objects.create(id=None, sensor=sensor, temperature=json_data['temperature'],
-                                           humidity=json_data['humidity'], date=date)
+                Misurazione.objects.create(id=None, sensor=sensor, temperature=json_data['temperature'], humidity=json_data['humidity'], date=date)
                 json_data['sensor'] = sensor_dict
                 json_data['date'] = date
                 online['sensor_' + str(sensor.id)] = json_data
-
-                '''
-                print('json_data:')
-                print(json_data)
-                print()
-                print('online:')
-                print(online)
-                '''
+                # print(json_data)
+                # print(online)
 
                 return HttpResponse('OK Misurazione Registrata')
 
@@ -85,6 +78,8 @@ def post_update(request):
 
         else:
             return HttpResponse('Indirizzo IP non Registrato')
+
+    return HttpResponse()
 
 
 def sensors_list(request):
@@ -123,14 +118,27 @@ def sensor_edit(request, pk):
     return render(request, 'iotemperature/sensor_edit.html', context={'form': sensor_form})
 
 
+def delete(request, pk):
+    if request.is_ajax():
+        if request.method == "POST":
+            sensor = Sensor.objects.get(pk=pk)
+            sensor.delete()
+            return JsonResponse({'result': 'deleted'})
+    return HttpResponse()
+
+
 def charts(request):
     sensors = Sensor.objects.all()
-    misurazioni = serializers.serialize("json", Misurazione.objects.all().order_by('date'))
-    # print(misurazioni)
+    return render(request, 'iotemperature/charts.html', context={'sensors': sensors})
+
+
+def get_misurazioni(request, pk):
     if request.is_ajax():
+        misurazioni = serializers.serialize("json", Misurazione.objects.filter(sensor=pk).order_by('date'))
         return JsonResponse(misurazioni, safe=False)
 
-    return render(request, 'iotemperature/charts.html', context={'sensors': sensors, 'misurazoni': misurazioni})
+    return HttpResponse()
+
 
 
 '''
