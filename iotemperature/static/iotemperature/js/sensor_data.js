@@ -26,8 +26,10 @@ var config = {
     options: {
         responsive: true,
 
-        //hoverMode: 'index',
-        //stacked: true,
+        tooltips: {
+            mode: 'x',
+            intersect: false,
+        },
 
         scales: {
             xAxes: [{
