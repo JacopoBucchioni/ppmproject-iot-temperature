@@ -17,12 +17,12 @@ def is_offline(pk: int = 0):  # se la data dell'ultima misurazione salvata in on
     offlineInterval = 30  # in seconds
     if pk:
         if online['sensor_' + str(pk)]:
-            if (datetime.now() - online['sensor_' + str(pk)]['date']).seconds > offlineInterval:
+            if abs((datetime.now() - online['sensor_' + str(pk)]['date'])).seconds > offlineInterval:
                 online['sensor_' + str(pk)] = None
     else:
         for i in online:
             if online[str(i)]:
-                if (datetime.now() - online[str(i)]['date']).seconds > offlineInterval:
+                if abs((datetime.now() - online[str(i)]['date'])).seconds > offlineInterval:
                     online[str(i)] = None
 
 
@@ -63,14 +63,16 @@ def post_update(request):
             sensor_dict = model_to_dict(sensor, fields=['id', 'friendlyName', 'cluster'])
             # print(sensor_dict)
             date = datetime.strptime(json_data['date'], '%Y-%m-%dT%H:%M:%S')
-            if date <= datetime.now():
+
+            if abs((datetime.now() - date)).seconds <= 1:
+                # sono accettate solo le misurazione la cui ora ha un delta <= 1 s rispetta all'ora corente
+
                 Misurazione.objects.create(id=None, sensor=sensor, temperature=json_data['temperature'], humidity=json_data['humidity'], date=date)
                 json_data['sensor'] = sensor_dict
                 json_data['date'] = date
                 online['sensor_' + str(sensor.id)] = json_data
                 # print(json_data)
                 # print(online)
-
                 return HttpResponse('OK Misurazione Registrata')
 
             else:
@@ -138,6 +140,17 @@ def get_misurazioni(request, pk):
         return JsonResponse(misurazioni, safe=False)
 
     return HttpResponse()
+
+
+
+
+
+
+
+
+
+
+
 
 
 
