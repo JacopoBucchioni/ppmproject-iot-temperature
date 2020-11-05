@@ -10,8 +10,12 @@ var config = {
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 fill: false,
-
                 pointRadius: 0,
+                lineTension: 0,
+                borderWidth: 2,
+
+                pointHitRadius: 5,
+                pointHoverRadius: 5,
             },
 
             {
@@ -20,14 +24,25 @@ var config = {
                 backgroundColor: 'rgb(54, 162, 235)',
                 borderColor: 'rgb(54, 162, 235)',
                 fill: false,
-
                 pointRadius: 0,
+                lineTension: 0,
+                borderWidth: 2,
+
+                pointHitRadius: 5,
+                pointHoverRadius: 5,
             }
         ]
     },
 
     options: {
         responsive: true,
+
+        showLines: true, // disable for all datasets
+
+        tooltips: {
+            mode: 'index',
+            intersect: false,
+        },
 
         //hoverMode: 'index',
         //stacked: false,
@@ -37,14 +52,18 @@ var config = {
                 display: true,
                 type: 'time',
                 distribution: 'series',
-                time:{
-                  parser: 'MM/DD/YYYY HH:mm',
+                time: {
+                    unit: 'minute',
+                    displayFormats: {
+                        minute: 'D MMM HH:mm'
+                    }
                 },
+
+
+
                 ticks: {
                     source: 'auto'
                 },
-
-
                 scaleLabel: {
                     display: true,
                     labelString: 'Time'
