@@ -56,7 +56,6 @@ void loop() {
     HTTPClient http;
     
     Serial.print("[HTTP] begin...\n");
-
     http.begin(client, SERVER_IP, 8000, "/update/"); // LOCALHOST
     //http.begin(client, SERVER_HOST"/update/");     // SERVER_HOST
 
