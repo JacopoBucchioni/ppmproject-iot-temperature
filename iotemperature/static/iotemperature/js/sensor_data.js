@@ -37,7 +37,7 @@ var config = {
                 type: 'time',
                 time: {
                     displayFormats: {
-                        second: 'h:mm:ss'
+                        second: 'H:mm:ss'
                     }
                 },
                 ticks: {
@@ -87,19 +87,17 @@ function getData(callback) {
 
         success: function (response) {
             //console.log(response);
+            if (JSON.stringify(online)===JSON.stringify(response)) {
 
-            if (JSON.stringify(online)===JSON.stringify(response)) {}
-            else {
+            } else {
                 online = response;
                 callback();
             }
-
         },
         error: function (error) {
             console.log(error);
         }
     });
-
 }
 
 function addData() {
