@@ -21,9 +21,9 @@
                                 </div>
 
                                 <div class="col-8 col-sm-8 col-md-10 col-lg-12">
-                                    <select class="selectpicker form-control show-tick" data-showSubtext="true" data-style=""
-                                            data-styleBase="form-control"
-                                            id="sensori" title="Nessun Sensore Selezionato">
+                                    <select class="selectpicker form-control show-tick" data-style=""
+                                            data-styleBase="form-control" data-showSubtext="true" id="sensori"
+                                            title="Nessun Sensore Selezionato">
                                         {% for s in sensors %}
                                             {% if s.friendlyName %}
                                                 <option value="{{ s.id }}"
