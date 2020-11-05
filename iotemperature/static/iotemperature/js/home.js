@@ -3,6 +3,7 @@ var updateInterval = 1000 //in ms
 
 var online;
 var container;
+var text;
 
 
 function getData(callback) {
@@ -12,14 +13,12 @@ function getData(callback) {
 
         success: function (response) {
             //console.log(response);
-
             if (JSON.stringify(online) === JSON.stringify(response)) {
 
             } else {
                 online = response;
                 callback();
             }
-
         },
         error: function (error) {
             console.log(error);
@@ -28,15 +27,14 @@ function getData(callback) {
 }
 
 function appendData() {
-
     if (online) {
         console.log('online != {}', online);
-        //TODO: hide <p> with big text ""NESSUN SENSORE ONLINE"
 
         for (var i in online) {
             var sensorCard = $("#" + i);
 
             if (online[i]) {
+                text.hide();
                 var date = new Date(online[i]["date"]);
 
                 if (sensorCard.length) {
@@ -79,15 +77,21 @@ function appendData() {
                             '            </div>');
                     }
                 }
+
             } else {
                 if (sensorCard.length) {
                     console.log("l'elemento esite e viene cancellato");
-
                     sensorCard.remove();
                 }
             }
         }
+        // console.log('dimensione container dopo il for', container.children().length);
+        if (container.children().length == 0) {
+            text.show();
+        }
+
     } else {
+        text.show();
         console.log("NESSUN SENSORE ONLINE online=={}", online);
     }
 }
@@ -99,5 +103,6 @@ function updateData(){
 
 $(document).ready(function () {
     container = $("#online-sensor");
+    text = $("#info-text");
     updateData();
 });
