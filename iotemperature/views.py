@@ -57,14 +57,14 @@ def get_sensor_data(request, pk):
 def post_update(request):
     if request.method == "POST":
         json_data = json.loads(request.body)
-        # print(json_data)
+        print(json_data)
         if Sensor.objects.filter(IPAddress=json_data['IPAddress']):
             sensor = Sensor.objects.get(IPAddress=json_data['IPAddress'])
             sensor_dict = model_to_dict(sensor, fields=['id', 'friendlyName', 'cluster'])
             # print(sensor_dict)
             date = datetime.strptime(json_data['date'], '%Y-%m-%dT%H:%M:%S')
 
-            if abs((datetime.now() - date)).seconds <= 1:
+            if abs((datetime.now() - date)).seconds <= 5:
                 # sono accettate solo le misurazione la cui ora ha un delta <= 1 s rispetta all'ora corente
 
                 Misurazione.objects.create(id=None, sensor=sensor, temperature=json_data['temperature'], humidity=json_data['humidity'], date=date)
