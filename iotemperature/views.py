@@ -137,9 +137,9 @@ def charts(request):
 
 def get_misurazioni(request, pk):
     if request.is_ajax():
-        start = datetime.now()
+        start = datetime.now().timestamp()*1000
         misurazioni = serializers.serialize("json", Misurazione.objects.filter(sensor=pk).order_by('date'))
-        end = datetime.now()
+        end = datetime.now().timestamp()*1000
         print("time: " + str(end - start))
         # print(misurazioni)
         return JsonResponse(misurazioni, safe=False)
