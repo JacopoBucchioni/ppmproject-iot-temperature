@@ -8,7 +8,6 @@ from django.forms.models import model_to_dict
 from .models import Sensor, Cluster, Misurazione
 from .forms import SensorForm, ClusterForm
 
-from timeit import default_timer as timer
 
 # Create your views here.
 
@@ -138,9 +137,9 @@ def charts(request):
 
 def get_misurazioni(request, pk):
     if request.is_ajax():
-        start = timer()
+        start = datetime.now().microsecond/1000
         misurazioni = serializers.serialize("json", Misurazione.objects.filter(sensor=pk).order_by('date'))
-        end = timer()
+        end = datetime.now().microsecond/1000
         print("time: " + str(end-start))
         # print(misurazioni)
         return JsonResponse(misurazioni, safe=False)
