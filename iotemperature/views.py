@@ -139,6 +139,7 @@ def get_misurazioni(request, pk):
     if request.is_ajax():
         inizio = request.GET.get("inizio")
         fine = request.GET.get("fine")
+        start = datetime.now().timestamp() * 1000
         if inizio and fine:
             inizio_date = datetime.strptime(inizio, '%Y-%m-%dT%H:%M')
             fine_date = datetime.strptime(fine, '%Y-%m-%dT%H:%M')
@@ -153,11 +154,10 @@ def get_misurazioni(request, pk):
             misurazioni = serializers.serialize("json", Misurazione.objects.filter(sensor=pk, date__lte=fine_date).order_by('date'))
 
         else:
-            # start = datetime.now().timestamp()*1000
             misurazioni = serializers.serialize("json", Misurazione.objects.filter(sensor=pk).order_by('date'))
-            # end = datetime.now().timestamp()*1000
-            # print("time: " + str(end - start))
-
+            
+        end = datetime.now().timestamp() * 1000
+        print("time: " + str(end - start))
         return JsonResponse(misurazioni, safe=False)
 
     return HttpResponse()
