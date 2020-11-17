@@ -37,7 +37,7 @@ var config = {
     options: {
         responsive: true,
 
-        showLines: true, // disable for all datasets
+        showLines: true, // disable lines for all datasets (improve render performance)
 
         tooltips: {
             mode: 'index',
@@ -143,6 +143,8 @@ $(document).ready(function () {
 
 
     $("#bottoneGrafico").click(function () {
+        var timer_start = Date.now();
+        console.log('timer_start', timer_start);
         var id_sensore = $("#sensori")[0].value;
         var inizio = $("#inizio")[0].value;
         var fine = $("#fine")[0].value;
@@ -151,12 +153,17 @@ $(document).ready(function () {
             $.getJSON("sensor/" + id_sensore + "/getData/", function (data) {
                 misurazioni = JSON.parse(data);
                 console.log('misurazioni!!', misurazioni);
+                var timer_1 = Date.now();
+                console.log('tempo json ', timer_1-timer_start);
+
 
                 window.myLine.data.labels = [];
                 window.myLine.data.datasets.forEach((dataset) => {
                     dataset.data = [];
                 });
                 window.myLine.update();
+                var timer_2 = Date.now();
+                console.log('tempo clean chart ', timer_2-timer_start);
 
 
                 if (inizio && fine) {
@@ -168,7 +175,7 @@ $(document).ready(function () {
 
                         for (i = 0; i < misurazioni.length; i++) {
                             var mis_date = Date.parse(misurazioni[i]["fields"].date);
-                            if (mis_date <= fine_date && mis_date >= inizio_date) { //TODO: compare date in ISO String
+                            if (mis_date <= fine_date && mis_date >= inizio_date) {
                                 window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
                                 window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
                                 window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
@@ -190,7 +197,7 @@ $(document).ready(function () {
                         for (i = 0; i < misurazioni.length; i++) {
                             var mis_date = Date.parse(misurazioni[i]["fields"].date);
 
-                            if (mis_date >= inizio_date) { //TODO: compare date in ISO String
+                            if (mis_date >= inizio_date) {
                                 window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
                                 window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
                                 window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
@@ -205,7 +212,7 @@ $(document).ready(function () {
                         for (i = 0; i < misurazioni.length; i++) {
                             var mis_date = Date.parse(misurazioni[i]["fields"].date);
 
-                            if (mis_date <= fine_date) { //TODO: compare date in ISO String
+                            if (mis_date <= fine_date) {
                                 window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
                                 window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
                                 window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
@@ -226,6 +233,8 @@ $(document).ready(function () {
                         }
                         window.myLine.update();
                         //console.log(window.myLine);
+                        var timer_3 = Date.now();
+                        console.log('tempo render chart ', timer_3-timer_start);
                     }
                 }
             });
