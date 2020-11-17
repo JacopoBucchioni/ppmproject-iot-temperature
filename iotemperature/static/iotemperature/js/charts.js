@@ -37,10 +37,6 @@ var config = {
     options: {
         responsive: true,
 
-        animation: {
-            duration: 0 // general animation time
-        },
-
         showLines: true, // disable lines for all datasets (improve render performance)
 
         tooltips: {
@@ -63,8 +59,7 @@ var config = {
                     }
                 },
 
-
-
+                
                 ticks: {
                     source: 'auto'
                 },
@@ -103,21 +98,6 @@ window.onload = function () {
     window.myLine = new Chart(ctx, config);
 };
 
-function getMisurazioni(callback) {
-            $.ajax({
-                type: 'GET',
-                url: "",
-
-                success: function (response) {
-                    misurazioni = JSON.parse(response);
-                    callback();
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        }
-
 Date.prototype.toIsoString = function() {
     var tzo = -this.getTimezoneOffset(),
         dif = tzo >= 0 ? '+' : '-',
@@ -147,113 +127,43 @@ $(document).ready(function () {
 
 
     $("#bottoneGrafico").click(function () {
-        var timer = Date.now();
+        var timer_start = Date.now();
         var id_sensore = $("#sensori")[0].value;
         var inizio = $("#inizio")[0].value;
         var fine = $("#fine")[0].value;
 
         if (id_sensore) {
-            var timer_start = Date.now();
-            $.getJSON("sensor/" + id_sensore + "/getData/", function (data) {
-                var timer_0 = Date.now();
-                console.log('tempo get json ', timer_0-timer_start);
-                misurazioni = JSON.parse(data);
-                var timer_00 = Date.now();
-                console.log('tempo json parse ', timer_00-timer_0);
-                console.log('misurazioni!!', misurazioni);
-                var timer_1 = Date.now();
-                console.log('tempo stamp json ', timer_1-timer_00);
+            if (inizio && fine && inizio > fine) {
+                alert("Data Inizio Supera Data Fine");
+                $("#inizio")[0].value = "";
+                $("#fine")[0].value = "";
+
+            } else {
+
+                $.getJSON("sensor/" + id_sensore + "/getData/", {"inizio": inizio, "fine": fine}, function (data) {
+                    misurazioni = JSON.parse(data);
+                    console.log('misurazioni!!', misurazioni);
+
+                    window.myLine.data.labels = [];
+                    window.myLine.data.datasets.forEach((dataset) => {
+                        dataset.data = [];
+                    });
+                    window.myLine.update();
 
 
-                window.myLine.data.labels = [];
-                window.myLine.data.datasets.forEach((dataset) => {
-                    dataset.data = [];
+                    for (i = 0; i < misurazioni.length; i++) {
+                        window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
+                        window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
+                        window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
+                    }
+                    window.myLine.update();
+                    var timer_end = Date.now();
+                    console.log('TEMPO RENDER ', timer_end - timer_start);
+
                 });
-                window.myLine.update();
-                var timer_2 = Date.now();
-                console.log('tempo clean chart ', timer_2-timer_1);
-
-
-                if (inizio && fine) {
-                    if (inizio <= fine) {
-                        //console.log("sensore selezionato data inizio selezionata data fine selezionata");
-                        //if (inizio <= fine) {
-                        var inizio_date = Date.parse(inizio);
-                        var fine_date = Date.parse(fine);
-
-                        for (i = 0; i < misurazioni.length; i++) {
-                            var mis_date = Date.parse(misurazioni[i]["fields"].date);
-                            if (mis_date <= fine_date && mis_date >= inizio_date) {
-                                window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
-                                window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
-                                window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
-                            }
-                        }
-                        window.myLine.update();
-                        //console.log(window.myLine);
-
-                    } else {
-                        alert("Data Inizio Supera Data Fine");
-                        $("#inizio")[0].value = "";
-                        $("#fine")[0].value = "";
-                    }
-
-                } else {
-                    if (inizio) {
-                        //console.log("sensore selezionato data inizio selezionata data fine non selezionata");
-                        var inizio_date = Date.parse(inizio);
-                        for (i = 0; i < misurazioni.length; i++) {
-                            var mis_date = Date.parse(misurazioni[i]["fields"].date);
-
-                            if (mis_date >= inizio_date) {
-                                window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
-                                window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
-                                window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
-                            }
-
-                        }
-                        window.myLine.update();
-                        //console.log(window.myLine);
-                    } else if (fine) {
-                        //console.log("sensore selezionato data inizio non selezionata data fine selezionata");
-                        var fine_date = Date.parse(fine);
-                        for (i = 0; i < misurazioni.length; i++) {
-                            var mis_date = Date.parse(misurazioni[i]["fields"].date);
-
-                            if (mis_date <= fine_date) {
-                                window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
-                                window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
-                                window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
-                            }
-
-                        }
-                        window.myLine.update();
-                        //console.log(window.myLine);
-
-                    } else {
-                        //console.log("sensore selezionato data inizio non selezionata data fine non selezionata");
-                        var t1 = Date.now();
-                        for (i = 0; i < misurazioni.length; i++) {
-
-                            window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
-                            window.myLine.data.datasets[0].data.push(misurazioni[i]["fields"].temperature);
-                            window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
-
-                        }
-                        var t2 = Date.now();
-                        console.log('tempo for ',t2-t1);
-                        window.myLine.update();
-                        //console.log(window.myLine);
-                        var timer_3 = Date.now();
-                        console.log('tempo render chart start for ', timer_3-t1);
-                        console.log('tempo render chart post get json ', timer_3-timer_0);
-                        console.log('TEMPO TOTALE RENDER ', timer_3-timer);
-                    }
-                }
-            });
+            }
         } else {
             alert("Non hai selezionato alcun Sesore");
         }
     });
-
 });
