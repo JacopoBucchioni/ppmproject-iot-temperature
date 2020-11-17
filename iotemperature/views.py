@@ -137,11 +137,27 @@ def charts(request):
 
 def get_misurazioni(request, pk):
     if request.is_ajax():
-        start = datetime.now().timestamp()*1000
-        misurazioni = serializers.serialize("json", Misurazione.objects.filter(sensor=pk).order_by('date'))
-        end = datetime.now().timestamp()*1000
-        print("time: " + str(end - start))
-        # print(misurazioni)
+        inizio = request.GET.get("inizio")
+        fine = request.GET.get("fine")
+        if inizio and fine:
+            inizio_date = datetime.strptime(inizio, '%Y-%m-%dT%H:%M')
+            fine_date = datetime.strptime(fine, '%Y-%m-%dT%H:%M')
+            misurazioni = serializers.serialize("json", Misurazione.objects.filter(sensor=pk, date__range=(inizio_date, fine_date)).order_by('date'))
+
+        elif inizio:
+            inizio_date = datetime.strptime(inizio, '%Y-%m-%dT%H:%M')
+            misurazioni = serializers.serialize("json", Misurazione.objects.filter(sensor=pk, date__gt=inizio_date).order_by('date'))
+
+        elif fine:
+            fine_date = datetime.strptime(fine, '%Y-%m-%dT%H:%M')
+            misurazioni = serializers.serialize("json", Misurazione.objects.filter(sensor=pk, date__lte=fine_date).order_by('date'))
+
+        else:
+            # start = datetime.now().timestamp()*1000
+            misurazioni = serializers.serialize("json", Misurazione.objects.filter(sensor=pk).order_by('date'))
+            # end = datetime.now().timestamp()*1000
+            # print("time: " + str(end - start))
+
         return JsonResponse(misurazioni, safe=False)
 
     return HttpResponse()
