@@ -140,7 +140,7 @@ def get_misurazioni(request, pk):
         start = datetime.now()
         misurazioni = serializers.serialize("json", Misurazione.objects.filter(sensor=pk).order_by('date'))
         end = datetime.now()
-        print("time: " + str((end - start).microseconds / 1000))
+        print("time: " + str(end - start))
         # print(misurazioni)
         return JsonResponse(misurazioni, safe=False)
 
