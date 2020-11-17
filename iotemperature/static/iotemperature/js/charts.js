@@ -143,22 +143,21 @@ $(document).ready(function () {
 
 
     $("#bottoneGrafico").click(function () {
-        var timer_start = Date.now();
-        console.log('timer_start', timer_start);
         var id_sensore = $("#sensori")[0].value;
         var inizio = $("#inizio")[0].value;
         var fine = $("#fine")[0].value;
 
         if (id_sensore) {
+            var timer_start = Date.now();
             $.getJSON("sensor/" + id_sensore + "/getData/", function (data) {
                 var timer_0 = Date.now();
                 console.log('tempo get json ', timer_0-timer_start);
                 misurazioni = JSON.parse(data);
                 var timer_00 = Date.now();
-                console.log('tempo json parse ', timer_00-timer_start);
+                console.log('tempo json parse ', timer_00-timer_0);
                 console.log('misurazioni!!', misurazioni);
                 var timer_1 = Date.now();
-                console.log('tempo stamp json ', timer_1-timer_start);
+                console.log('tempo stamp json ', timer_1-timer_00);
 
 
                 window.myLine.data.labels = [];
@@ -167,7 +166,7 @@ $(document).ready(function () {
                 });
                 window.myLine.update();
                 var timer_2 = Date.now();
-                console.log('tempo clean chart ', timer_2-timer_start);
+                console.log('tempo clean chart ', timer_2-timer_1);
 
 
                 if (inizio && fine) {
@@ -228,6 +227,7 @@ $(document).ready(function () {
 
                     } else {
                         //console.log("sensore selezionato data inizio non selezionata data fine non selezionata");
+                        var t1 = Date.now();
                         for (i = 0; i < misurazioni.length; i++) {
 
                             window.myLine.data.labels.push(new Date(misurazioni[i]["fields"].date));
@@ -235,10 +235,12 @@ $(document).ready(function () {
                             window.myLine.data.datasets[1].data.push(misurazioni[i]["fields"].humidity);
 
                         }
+                        var t2 = Date.now();
+                        console.log('tempo for ',t2-t1);
                         window.myLine.update();
                         //console.log(window.myLine);
                         var timer_3 = Date.now();
-                        console.log('tempo render chart ', timer_3-timer_start);
+                        console.log('tempo render chart ', timer_3-timer_2);
                     }
                 }
             });
