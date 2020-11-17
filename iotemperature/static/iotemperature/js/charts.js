@@ -59,7 +59,7 @@ var config = {
                     }
                 },
 
-                
+
                 ticks: {
                     source: 'auto'
                 },
@@ -139,8 +139,10 @@ $(document).ready(function () {
                 $("#fine")[0].value = "";
 
             } else {
-
+                var t1 = Date.now();
                 $.getJSON("sensor/" + id_sensore + "/getData/", {"inizio": inizio, "fine": fine}, function (data) {
+                    var t2 = Date.now();
+                    console.log('TEMPO JSON ', t2-t1);
                     misurazioni = JSON.parse(data);
                     console.log('misurazioni!!', misurazioni);
 
@@ -158,7 +160,7 @@ $(document).ready(function () {
                     }
                     window.myLine.update();
                     var timer_end = Date.now();
-                    console.log('TEMPO RENDER ', timer_end - timer_start);
+                    console.log('TEMPO TOTALE RENDER ', timer_end - timer_start);
 
                 });
             }
