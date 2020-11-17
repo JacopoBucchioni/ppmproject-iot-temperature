@@ -37,6 +37,10 @@ var config = {
     options: {
         responsive: true,
 
+        animation: {
+            duration: 0 // general animation time
+        },
+
         showLines: true, // disable lines for all datasets (improve render performance)
 
         tooltips: {
