@@ -143,6 +143,7 @@ $(document).ready(function () {
 
 
     $("#bottoneGrafico").click(function () {
+        var timer = Date.now();
         var id_sensore = $("#sensori")[0].value;
         var inizio = $("#inizio")[0].value;
         var fine = $("#fine")[0].value;
@@ -242,6 +243,7 @@ $(document).ready(function () {
                         var timer_3 = Date.now();
                         console.log('tempo render chart start for ', timer_3-t1);
                         console.log('tempo render chart post get json ', timer_3-timer_0);
+                        console.log('TEMPO TOTALE RENDER ', timer_3-timer);
                     }
                 }
             });
