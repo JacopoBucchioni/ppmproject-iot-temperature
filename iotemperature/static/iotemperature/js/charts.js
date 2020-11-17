@@ -240,7 +240,8 @@ $(document).ready(function () {
                         window.myLine.update();
                         //console.log(window.myLine);
                         var timer_3 = Date.now();
-                        console.log('tempo render chart ', timer_3-timer_2);
+                        console.log('tempo render chart start for ', timer_3-t1);
+                        console.log('tempo render chart post get json ', timer_3-timer_0);
                     }
                 }
             });
