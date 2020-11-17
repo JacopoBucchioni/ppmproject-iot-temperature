@@ -151,10 +151,14 @@ $(document).ready(function () {
 
         if (id_sensore) {
             $.getJSON("sensor/" + id_sensore + "/getData/", function (data) {
+                var timer_0 = Date.now();
+                console.log('tempo get json ', timer_0-timer_start);
                 misurazioni = JSON.parse(data);
+                var timer_00 = Date.now();
+                console.log('tempo json parse ', timer_00-timer_start);
                 console.log('misurazioni!!', misurazioni);
                 var timer_1 = Date.now();
-                console.log('tempo json ', timer_1-timer_start);
+                console.log('tempo stamp json ', timer_1-timer_start);
 
 
                 window.myLine.data.labels = [];
