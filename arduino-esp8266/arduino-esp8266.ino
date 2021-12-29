@@ -16,8 +16,8 @@ NTPClient timeClient(ntpUDP, "it.pool.ntp.org", utcOffset);
 #include <ESP8266HTTPClient.h>
 #define SERVER_IP "192.168.188.71" // LAN = 192.168.188.63   WiFi = 192.168.188.71   HOTSPOT = 192.168.43.79
 //#define SERVER_HOST "http://iotemperature.pythonanywhere.com" // SERVER_HOST
-const char* ssid = "skynet";
-const char* password = "Bnqm2PE4";
+const char* ssid = "SSID";
+const char* password = "PASSWORD";
 IPAddress myIPAddress;
 
 #include <ArduinoJson.h>
